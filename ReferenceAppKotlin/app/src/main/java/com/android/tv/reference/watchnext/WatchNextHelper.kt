@@ -306,7 +306,8 @@ object WatchNextHelper {
     @Synchronized
     private fun getWatchNextProgramByVideoId(id: String, context: Context): WatchNextProgram? {
         return findFirstWatchNextProgram(context) { cursor ->
-            (cursor.getString(cursor.getColumnIndex(COLUMN_INTERNAL_PROVIDER_ID)) == id)
+            val index = cursor.getColumnIndex(COLUMN_INTERNAL_PROVIDER_ID)
+            index > 0 && cursor.getString(index) == id
         }
     }
 
