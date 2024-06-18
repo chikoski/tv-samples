@@ -19,6 +19,9 @@
     <!-- Access internet-based media -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Notification permission -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <!-- Touch screen is not required -->
     <uses-feature
         android:name="android.hardware.touchscreen"
