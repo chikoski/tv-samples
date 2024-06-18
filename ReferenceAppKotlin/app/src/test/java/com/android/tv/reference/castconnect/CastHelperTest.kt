@@ -39,8 +39,8 @@ class CastHelperTest {
     private lateinit var mockMediaSession: MediaSessionCompat
 
     @Before
-    fun setUp() {
-        MockitoAnnotations.initMocks(this)
+    fun setUp()  {
+        MockitoAnnotations.openMocks(this)
     }
 
     @Test

@@ -43,7 +43,7 @@ class HomeScreenChannelHelperTest {
 
     @Before
     fun setUp() {
-        MockitoAnnotations.initMocks(this)
+        MockitoAnnotations.openMocks(this)
         channelHelper = HomeScreenChannelHelper(previewChannelHelper)
     }
 

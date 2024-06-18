@@ -42,7 +42,7 @@ class CastMediaLoadCommandCallbackTest {
 
     @Before
     fun setUp() {
-        MockitoAnnotations.initMocks(this)
+        MockitoAnnotations.openMocks(this)
     }
 
     @Test
@@ -72,7 +72,7 @@ class CastMediaLoadCommandCallbackTest {
             .build()
 
         Mockito.doReturn(video).`when`(mockVideoRepository)
-            .getVideoById(mediaLoadRequestDataTest.mediaInfo.contentId)
+            .getVideoById(mediaLoadRequestDataTest.mediaInfo!!.contentId)
 
         val result = castMediaLoadCommandCallbackTest
             .convertLoadRequestToVideo(mediaLoadRequestDataTest, mockVideoRepository)
@@ -92,7 +92,7 @@ class CastMediaLoadCommandCallbackTest {
             .build()
 
         Mockito.doReturn(null).`when`(mockVideoRepository)
-            .getVideoById(mediaLoadRequestDataTest.mediaInfo.contentId)
+            .getVideoById(mediaLoadRequestDataTest.mediaInfo!!.contentId)
 
         val result = castMediaLoadCommandCallbackTest
             .convertLoadRequestToVideo(mediaLoadRequestDataTest, mockVideoRepository)

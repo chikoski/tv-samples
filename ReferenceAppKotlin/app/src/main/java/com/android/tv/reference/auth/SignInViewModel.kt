@@ -84,13 +84,13 @@ class SignInViewModel(private val userManager: UserManager) :
     }
 
     sealed class SignInStatus {
-        object Success : SignInStatus()
+        data object Success : SignInStatus()
         class ShouldSavePassword(val username: String, val password: String) : SignInStatus()
         sealed class Error : SignInStatus() {
-            object InputError : Error()
-            object InvalidPassword : Error()
-            object ServerError : Error()
-            object OneTapInvalid : Error()
+            data object InputError : Error()
+            data object InvalidPassword : Error()
+            data object ServerError : Error()
+            data object OneTapInvalid : Error()
             class OneTapError(val exception: Exception) : Error()
         }
     }
@@ -98,7 +98,7 @@ class SignInViewModel(private val userManager: UserManager) :
 
 class SignInViewModelFactory(private val userManager: UserManager) :
     ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         var viewModel: T? = null
         if (modelClass.isAssignableFrom(modelClass)) {
             viewModel = modelClass.cast(SignInViewModel(userManager))!!

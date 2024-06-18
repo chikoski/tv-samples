@@ -87,36 +87,33 @@ class BrowseFragment : BrowseSupportFragment(), Target {
 
         viewModel = ViewModelProvider(this).get(BrowseViewModel::class.java)
         viewModel.browseContent.observe(
-            this,
-            {
-                adapter = BrowseAdapter(it, viewModel.customMenuItems.value ?: listOf())
-            }
-        )
+            this
+        ) {
+            adapter = BrowseAdapter(it, viewModel.customMenuItems.value ?: listOf())
+        }
         viewModel.customMenuItems.observe(
-            this,
-            {
-                adapter = BrowseAdapter(viewModel.browseContent.value ?: listOf(), it)
-            }
-        )
+            this
+        ) {
+            adapter = BrowseAdapter(viewModel.browseContent.value ?: listOf(), it)
+        }
         viewModel.isSignedIn.observe(
-            this,
-            {
-                viewModel.customMenuItems.postValue(
-                    listOf(
-                        BrowseCustomMenu(
-                            getString(R.string.menu_identity),
-                            listOf(
-                                if (it) {
-                                    signOutMenuItem
-                                } else {
-                                    signInMenuItem
-                                }
-                            )
+            this
+        ) {
+            viewModel.customMenuItems.postValue(
+                listOf(
+                    BrowseCustomMenu(
+                        getString(R.string.menu_identity),
+                        listOf(
+                            if (it) {
+                                signOutMenuItem
+                            } else {
+                                signInMenuItem
+                            }
                         )
                     )
                 )
-            }
-        )
+            )
+        }
 
         setOnItemViewClickedListener { _, item, _, _ ->
             when (item) {
