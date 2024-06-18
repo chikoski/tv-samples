@@ -33,7 +33,8 @@ class VideoRepositoryTest {
     @Before
     fun setUp() {
         fakeRepository = FakeVideoRepository(
-            ApplicationProvider.getApplicationContext() as Application)
+            ApplicationProvider.getApplicationContext() as Application
+        )
     }
 
     @Test
@@ -69,5 +70,4 @@ class VideoRepositoryTest {
 
         assertThat(nextEpisode).isNull()
     }
-
 }

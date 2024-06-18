@@ -75,14 +75,14 @@ class PlaybackViewModel(application: Application) :
     private fun createNonUiPlaybackStateListeners(): List<PlaybackStateListener> {
         return listOf(
             LoadPlaybackStateListener(
-                    stateMachine = this,
-                    watchProgressRepository = repository,
+                stateMachine = this,
+                watchProgressRepository = repository,
             ),
             WatchNextPlaybackStateListener(getApplication()),
             WatchProgressPlaybackStateListener(
-                    watchProgressRepository = repository,
-                    coroutineScope = viewModelScope,
-                    coroutineDispatcher = Dispatchers.IO
+                watchProgressRepository = repository,
+                coroutineScope = viewModelScope,
+                coroutineDispatcher = Dispatchers.IO
             )
         )
     }

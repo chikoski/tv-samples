@@ -31,7 +31,6 @@ import androidx.tvprovider.media.tv.TvContractCompat
 import com.android.tv.reference.R
 import com.android.tv.reference.repository.VideoRepositoryFactory
 import com.android.tv.reference.shared.datamodel.Video
-import com.android.tv.reference.shared.datamodel.VideoType
 
 /**
  * Helper class that simplifies interactions with the ATV home screen
@@ -91,15 +90,8 @@ class HomeScreenChannelHelper(private val previewChannelHelper: PreviewChannelHe
         videos.forEach {
             val program = PreviewProgram.Builder()
                 .setChannelId(channelId)
-                .setType(getProgramType(it))
-                .setTitle(it.name)
-                .setDescription(it.description)
-                .setPosterArtUri(Uri.parse(it.thumbnailUri))
-                .setPosterArtAspectRatio(TvContractCompat.PreviewPrograms.ASPECT_RATIO_16_9)
-                .setIntentUri(Uri.parse(it.uri))
                 .setInternalProviderId(it.id)
                 .build()
-
             previewChannelHelper.publishPreviewProgram(program)
         }
     }
@@ -158,12 +150,4 @@ class HomeScreenChannelHelper(private val previewChannelHelper: PreviewChannelHe
         return programIdsInChannel
     }
 
-    // Returns the PreviewPrograms.TYPE_X for the Video's VideoType
-    private fun getProgramType(video: Video): Int {
-        return when (video.videoType) {
-            VideoType.MOVIE -> TvContract.PreviewPrograms.TYPE_MOVIE
-            VideoType.EPISODE -> TvContract.PreviewPrograms.TYPE_TV_EPISODE
-            VideoType.CLIP -> TvContract.PreviewPrograms.TYPE_CLIP
-        }
-    }
 }

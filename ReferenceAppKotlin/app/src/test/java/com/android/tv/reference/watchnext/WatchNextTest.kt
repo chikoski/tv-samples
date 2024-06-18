@@ -91,7 +91,8 @@ class WatchNextTest {
         assertThat(program?.internalProviderId).isEqualTo(TEST_VIDEO_ID)
         assertThat(program?.title).isEqualTo(TEST_VIDEO_NAME)
         assertThat(program?.lastPlaybackPositionMillis).isEqualTo(
-            TEST_VIDEO_PLAYBACK_POSITION_MILLIS)
+            TEST_VIDEO_PLAYBACK_POSITION_MILLIS
+        )
     }
 
     /**
@@ -124,7 +125,8 @@ class WatchNextTest {
         WatchNextHelper.handleWatchNextForEpisode(
             unfinishedEpisode, TEST_VIDEO_PLAYBACK_POSITION_MILLIS, PLAY_STATE_PAUSED,
             FakeVideoRepository(ApplicationProvider.getApplicationContext() as Application),
-            ApplicationProvider.getApplicationContext())
+            ApplicationProvider.getApplicationContext()
+        )
 
         // Expected : verify if program was added to Watch Next.
         val watchList =
@@ -142,9 +144,12 @@ class WatchNextTest {
         assertThat(program.episodeTitle).isEqualTo(unfinishedEpisode.name)
         assertThat(program.seasonTitle).isEqualTo(
             (ApplicationProvider.getApplicationContext() as Context).getString(
-                R.string.season, unfinishedEpisode.category, unfinishedEpisode.seasonNumber))
+                R.string.season, unfinishedEpisode.category, unfinishedEpisode.seasonNumber
+            )
+        )
         assertThat(program.lastPlaybackPositionMillis).isEqualTo(
-            TEST_VIDEO_PLAYBACK_POSITION_MILLIS)
+            TEST_VIDEO_PLAYBACK_POSITION_MILLIS
+        )
     }
 
     /**
@@ -159,12 +164,14 @@ class WatchNextTest {
         WatchNextHelper.handleWatchNextForEpisode(
             firstWatchedEpisode, TEST_VIDEO_PLAYBACK_POSITION_MILLIS, PLAY_STATE_PAUSED,
             FakeVideoRepository(ApplicationProvider.getApplicationContext() as Application),
-            ApplicationProvider.getApplicationContext())
+            ApplicationProvider.getApplicationContext()
+        )
 
         WatchNextHelper.handleWatchNextForEpisode(
             secondWatchedEpisode, TEST_VIDEO_PLAYBACK_POSITION_MILLIS, PLAY_STATE_PAUSED,
             FakeVideoRepository(ApplicationProvider.getApplicationContext() as Application),
-            ApplicationProvider.getApplicationContext())
+            ApplicationProvider.getApplicationContext()
+        )
 
         // Expected : verify if program was added to Watch Next.
         val watchList =
@@ -183,9 +190,12 @@ class WatchNextTest {
         assertThat(program.episodeTitle).isEqualTo(secondWatchedEpisode.name)
         assertThat(program.seasonTitle).isEqualTo(
             (ApplicationProvider.getApplicationContext() as Context).getString(
-                R.string.season, secondWatchedEpisode.category, secondWatchedEpisode.seasonNumber))
+                R.string.season, secondWatchedEpisode.category, secondWatchedEpisode.seasonNumber
+            )
+        )
         assertThat(program.lastPlaybackPositionMillis).isEqualTo(
-            TEST_VIDEO_PLAYBACK_POSITION_MILLIS)
+            TEST_VIDEO_PLAYBACK_POSITION_MILLIS
+        )
     }
 
     /**
@@ -200,12 +210,14 @@ class WatchNextTest {
         WatchNextHelper.handleWatchNextForEpisode(
             firstWatchedEpisode, TEST_VIDEO_PLAYBACK_POSITION_MILLIS, PLAY_STATE_PAUSED,
             FakeVideoRepository(ApplicationProvider.getApplicationContext() as Application),
-            ApplicationProvider.getApplicationContext())
+            ApplicationProvider.getApplicationContext()
+        )
 
         WatchNextHelper.handleWatchNextForEpisode(
             secondWatchedEpisode, TEST_VIDEO_PLAYBACK_POSITION_MILLIS, PLAY_STATE_PAUSED,
             FakeVideoRepository(ApplicationProvider.getApplicationContext() as Application),
-            ApplicationProvider.getApplicationContext())
+            ApplicationProvider.getApplicationContext()
+        )
 
         // Expected : verify if program was added to Watch Next.
         val watchList =
@@ -224,9 +236,12 @@ class WatchNextTest {
         assertThat(program.episodeTitle).isEqualTo(secondWatchedEpisode.name)
         assertThat(program.seasonTitle).isEqualTo(
             (ApplicationProvider.getApplicationContext() as Context).getString(
-                R.string.season, secondWatchedEpisode.category, secondWatchedEpisode.seasonNumber))
+                R.string.season, secondWatchedEpisode.category, secondWatchedEpisode.seasonNumber
+            )
+        )
         assertThat(program.lastPlaybackPositionMillis).isEqualTo(
-            TEST_VIDEO_PLAYBACK_POSITION_MILLIS)
+            TEST_VIDEO_PLAYBACK_POSITION_MILLIS
+        )
     }
 
     /**
@@ -242,7 +257,8 @@ class WatchNextTest {
         WatchNextHelper.handleWatchNextForEpisode(
             currentEpisode, TEST_VIDEO_PLAYBACK_CREDIT_SCENE_POSITION_MILLIS, PLAY_STATE_PAUSED,
             FakeVideoRepository(ApplicationProvider.getApplicationContext() as Application),
-            ApplicationProvider.getApplicationContext())
+            ApplicationProvider.getApplicationContext()
+        )
 
         // Expected : verify if program was added to Watch Next.
         val watchList =
@@ -261,7 +277,9 @@ class WatchNextTest {
         assertThat(program.episodeTitle).isEqualTo(nextEpisode.name)
         assertThat(program.seasonTitle).isEqualTo(
             (ApplicationProvider.getApplicationContext() as Context).getString(
-                R.string.season, nextEpisode.category, nextEpisode.seasonNumber))
+                R.string.season, nextEpisode.category, nextEpisode.seasonNumber
+            )
+        )
         assertThat(program.lastPlaybackPositionMillis).isEqualTo(0)
     }
 
@@ -278,7 +296,8 @@ class WatchNextTest {
         WatchNextHelper.handleWatchNextForEpisode(
             currentEpisode, TEST_VIDEO_PLAYBACK_CREDIT_SCENE_POSITION_MILLIS, PLAY_STATE_PAUSED,
             FakeVideoRepository(ApplicationProvider.getApplicationContext() as Application),
-            ApplicationProvider.getApplicationContext())
+            ApplicationProvider.getApplicationContext()
+        )
 
         // Expected : verify if program was added to Watch Next.
         val watchList =
@@ -297,7 +316,9 @@ class WatchNextTest {
         assertThat(program.episodeTitle).isEqualTo(nextEpisode.name)
         assertThat(program.seasonTitle).isEqualTo(
             (ApplicationProvider.getApplicationContext() as Context).getString(
-                R.string.season, nextEpisode.category, nextEpisode.seasonNumber))
+                R.string.season, nextEpisode.category, nextEpisode.seasonNumber
+            )
+        )
         assertThat(program.lastPlaybackPositionMillis).isEqualTo(0)
     }
 
@@ -508,29 +529,27 @@ class WatchNextTest {
 
         override fun applyBatch(authority: String, operations: ArrayList<ContentProviderOperation>):
             Array<out ContentProviderResult> {
-            var results = ArrayList<ContentProviderResult>()
+                var results = ArrayList<ContentProviderResult>()
 
-            operations.forEach { operation ->
-                if (operation.isDelete) {
-                    val id = operation.uri.lastPathSegment?.toLong() ?: -1L
-                    val removed = this.valuesInMemory.removeIf { it.id == id }
-                    if (removed) {
-                        var result = ContentProviderResult(1)
-                        results.add(result)
-                    } else {
-                        results.add(ContentProviderResult(0))
+                operations.forEach { operation ->
+                    if (operation.isDelete) {
+                        val id = operation.uri.lastPathSegment?.toLong() ?: -1L
+                        val removed = this.valuesInMemory.removeIf { it.id == id }
+                        if (removed) {
+                            var result = ContentProviderResult(1)
+                            results.add(result)
+                        } else {
+                            results.add(ContentProviderResult(0))
+                        }
                     }
                 }
-            }
 
-            return results.toArray() as Array<out ContentProviderResult>
-        }
+                return results.toArray() as Array<out ContentProviderResult>
+            }
 
         override fun getType(uri: Uri): String {
             // This is an in-memory fake so getType is trivial.
             return ""
         }
-
-
     }
 }

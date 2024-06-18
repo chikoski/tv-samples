@@ -23,9 +23,9 @@ import androidx.work.Configuration
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.testing.WorkManagerTestInitHelper
+import com.android.tv.reference.playback.VideoPlaybackState
 import com.android.tv.reference.shared.datamodel.Video
 import com.android.tv.reference.shared.datamodel.VideoType
-import com.android.tv.reference.playback.VideoPlaybackState
 import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test

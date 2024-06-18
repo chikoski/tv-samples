@@ -22,9 +22,9 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.android.tv.reference.coroutines.CoroutinesTestRule
 import com.android.tv.reference.lifecycle.ext.getOrAwaitValue
+import com.android.tv.reference.playback.VideoPlaybackState
 import com.android.tv.reference.shared.datamodel.Video
 import com.android.tv.reference.shared.datamodel.VideoType
-import com.android.tv.reference.playback.VideoPlaybackState
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineScope

@@ -17,7 +17,6 @@ package com.android.tv.reference.castconnect
 
 import android.app.Application
 import android.content.Intent
-import android.support.v4.media.session.MediaSessionCompat
 import com.android.tv.reference.shared.datamodel.Video
 import com.google.android.gms.cast.tv.CastReceiverContext
 import com.google.android.gms.cast.tv.media.MediaManager

@@ -36,7 +36,7 @@ class LoadPlaybackStateListener(
 
     private var watchProgress: LiveData<WatchProgress>? = null
     private var video: Video? = null
-    private val watchProgressObserver = object: Observer<WatchProgress?> {
+    private val watchProgressObserver = object : Observer<WatchProgress?> {
         override fun onChanged(newWatchProgress: WatchProgress?) {
             startPosition = newWatchProgress?.startPosition ?: 0L
             if (video!!.isAfterEndCreditsPosition(startPosition!!)) {

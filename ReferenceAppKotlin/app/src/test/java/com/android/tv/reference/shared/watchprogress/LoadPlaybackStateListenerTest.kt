@@ -21,9 +21,9 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.android.tv.reference.playback.FakePlaybackStateMachine
+import com.android.tv.reference.playback.VideoPlaybackState
 import com.android.tv.reference.shared.datamodel.Video
 import com.android.tv.reference.shared.datamodel.VideoType
-import com.android.tv.reference.playback.VideoPlaybackState
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
 import org.junit.After

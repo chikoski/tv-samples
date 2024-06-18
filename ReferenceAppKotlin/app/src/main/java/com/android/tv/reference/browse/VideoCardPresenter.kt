@@ -36,8 +36,9 @@ class VideoCardPresenter : Presenter() {
         // Set the image size ahead of time since loading can take a while.
         val resources = context.resources
         binding.root.setMainImageDimensions(
-                resources.getDimensionPixelSize(R.dimen.image_card_width),
-                resources.getDimensionPixelSize(R.dimen.image_card_height))
+            resources.getDimensionPixelSize(R.dimen.image_card_width),
+            resources.getDimensionPixelSize(R.dimen.image_card_height)
+        )
 
         return ViewHolder(binding.root)
     }
@@ -50,7 +51,7 @@ class VideoCardPresenter : Presenter() {
         binding.root.contentText = getContentText(binding.root.resources, video)
 
         Picasso.get().load(video.thumbnailUri).placeholder(R.drawable.image_placeholder)
-                .error(R.drawable.image_placeholder).into(binding.root.mainImageView)
+            .error(R.drawable.image_placeholder).into(binding.root.mainImageView)
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {
@@ -67,8 +68,10 @@ class VideoCardPresenter : Presenter() {
      */
     private fun getContentText(resources: Resources, video: Video): String {
         return when (video.videoType) {
-            VideoType.EPISODE -> resources.getString(R.string.content_type_season_episode,
-                    video.seasonNumber, video.episodeNumber)
+            VideoType.EPISODE -> resources.getString(
+                R.string.content_type_season_episode,
+                video.seasonNumber, video.episodeNumber
+            )
             VideoType.MOVIE -> resources.getString(R.string.content_type_movie)
             VideoType.CLIP -> resources.getString(R.string.content_type_clip)
         }

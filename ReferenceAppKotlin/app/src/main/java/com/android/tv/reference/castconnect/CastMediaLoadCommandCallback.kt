@@ -19,10 +19,8 @@ import android.app.Application
 import com.android.tv.reference.repository.VideoRepository
 import com.android.tv.reference.repository.VideoRepositoryFactory
 import com.android.tv.reference.shared.datamodel.Video
-import com.google.android.gms.cast.MediaError
 import com.google.android.gms.cast.MediaInfo
 import com.google.android.gms.cast.MediaLoadRequestData
-import com.google.android.gms.cast.tv.media.MediaException
 import com.google.android.gms.cast.tv.media.MediaLoadCommandCallback
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks

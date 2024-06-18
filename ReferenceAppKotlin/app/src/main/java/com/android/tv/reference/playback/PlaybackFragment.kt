@@ -22,21 +22,16 @@ import androidx.fragment.app.viewModels
 import androidx.leanback.app.VideoSupportFragment
 import androidx.leanback.app.VideoSupportFragmentGlueHost
 import androidx.navigation.fragment.findNavController
-import com.android.tv.reference.R
-import com.android.tv.reference.castconnect.CastHelper
 import com.android.tv.reference.shared.datamodel.Video
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.ForwardingPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSource
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
-import com.google.android.exoplayer2.util.Util
 import com.google.android.gms.cast.tv.CastReceiverContext
 import timber.log.Timber
 import java.time.Duration
@@ -121,14 +116,14 @@ class PlaybackFragment : VideoSupportFragment() {
 
     private fun initializePlayer() {
         val dataSourceFactory = DefaultDataSource.Factory(requireContext())
-        val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).
-            createMediaSource(MediaItem.fromUri((video.videoUri)))
+        val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
+            .createMediaSource(MediaItem.fromUri((video.videoUri)))
         exoplayer = ExoPlayer.Builder(requireContext()).build().apply {
             setMediaSource(mediaSource)
             prepare()
             addListener(PlayerEventListener())
             prepareGlue(this)
-            mediaSessionConnector.setPlayer(object: ForwardingPlayer(this) {
+            mediaSessionConnector.setPlayer(object : ForwardingPlayer(this) {
                 override fun stop() {
                     // Treat stop commands as pause, this keeps ExoPlayer, MediaSession, etc.
                     // in memory to allow for quickly resuming. This also maintains the playback
@@ -183,7 +178,8 @@ class PlaybackFragment : VideoSupportFragment() {
             setQueueNavigator(SingleVideoQueueNavigator(video, mediaSession))
         }
         CastReceiverContext.getInstance().mediaManager.setSessionCompatToken(
-            mediaSession.sessionToken)
+            mediaSession.sessionToken
+        )
     }
 
     private fun startPlaybackFromWatchProgress(startPosition: Long) {
@@ -208,11 +204,14 @@ class PlaybackFragment : VideoSupportFragment() {
         override fun onIsPlayingChanged(isPlaying: Boolean) {
             when {
                 isPlaying -> viewModel.onStateChange(
-                    VideoPlaybackState.Play(video))
+                    VideoPlaybackState.Play(video)
+                )
                 exoplayer!!.playbackState == Player.STATE_ENDED -> viewModel.onStateChange(
-                    VideoPlaybackState.End(video))
+                    VideoPlaybackState.End(video)
+                )
                 else -> viewModel.onStateChange(
-                    VideoPlaybackState.Pause(video, exoplayer!!.currentPosition))
+                    VideoPlaybackState.Pause(video, exoplayer!!.currentPosition)
+                )
             }
         }
     }

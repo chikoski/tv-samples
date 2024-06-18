@@ -75,23 +75,33 @@ class WatchNextWorker(private val context: Context, params: WorkerParameters) :
         when (video?.videoType) {
             VideoType.MOVIE -> {
                 Timber.v("Add Movie to Watch Next : id = ${video.id}")
-                WatchNextHelper.handleWatchNextForMovie(video, watchPosition.toInt(), state, context)
+                WatchNextHelper.handleWatchNextForMovie(
+                    video,
+                    watchPosition.toInt(),
+                    state,
+                    context
+                )
             }
+
             VideoType.EPISODE -> {
                 Timber.v("Add Episode to Watch Next : id = ${video.id}")
                 WatchNextHelper.handleWatchNextForEpisode(
                     video, watchPosition.toInt(), state,
                     VideoRepositoryFactory.getVideoRepository(
-                        context.applicationContext as Application), context)
+                        context.applicationContext as Application
+                    ),
+                    context
+                )
             }
+
             VideoType.CLIP -> Timber.w(
                 "NOT recommended to add Clips / Trailers /Short videos to Watch Next "
             )
+
             else -> Timber.e("Invalid category for Video Type: ${video?.videoType}")
         }
 
         Timber.v("WatchNextWorker finished")
         return Result.success()
     }
-
 }
