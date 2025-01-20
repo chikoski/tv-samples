@@ -16,11 +16,39 @@
 
 package com.google.jetstream.presentation.theme // ktlint-disable filename
 
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.colorResource
-import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.darkColorScheme
 import com.google.jetstream.R
+
+private val lightColorScheme @Composable get() = lightColorScheme(
+    primary = colorResource(R.color.primary),
+    onPrimary = colorResource(R.color.onPrimary),
+    primaryContainer = colorResource(R.color.primaryContainer),
+    onPrimaryContainer = colorResource(R.color.onPrimaryContainer),
+    secondary = colorResource(R.color.secondary),
+    onSecondary = colorResource(R.color.onSecondary),
+    secondaryContainer = colorResource(R.color.secondaryContainer),
+    onSecondaryContainer = colorResource(R.color.onSecondaryContainer),
+    tertiary = colorResource(R.color.tertiary),
+    onTertiary = colorResource(R.color.onTertiary),
+    tertiaryContainer = colorResource(R.color.tertiaryContainer),
+    onTertiaryContainer = colorResource(R.color.onTertiaryContainer),
+    background = colorResource(R.color.background),
+    onBackground = colorResource(R.color.onBackground),
+    surface = colorResource(R.color.surface),
+    onSurface = colorResource(R.color.onSurface),
+    surfaceVariant = colorResource(R.color.surfaceVariant),
+    onSurfaceVariant = colorResource(R.color.onSurfaceVariant),
+    error = colorResource(R.color.error),
+    onError = colorResource(R.color.onError),
+    errorContainer = colorResource(R.color.errorContainer),
+    onErrorContainer = colorResource(R.color.onErrorContainer),
+    outline = colorResource(R.color.border),
+)
 
 private val darkColorScheme @Composable get() = darkColorScheme(
     primary = colorResource(R.color.primary),
@@ -45,7 +73,7 @@ private val darkColorScheme @Composable get() = darkColorScheme(
     onError = colorResource(R.color.onError),
     errorContainer = colorResource(R.color.errorContainer),
     onErrorContainer = colorResource(R.color.onErrorContainer),
-    border = colorResource(R.color.border),
+    outline = colorResource(R.color.border),
 )
 
 @Composable
@@ -53,7 +81,11 @@ fun JetStreamTheme(
     content: @Composable () -> Unit
 ) {
     MaterialTheme(
-        colorScheme = darkColorScheme,
+        colorScheme = if(isSystemInDarkTheme()) {
+            darkColorScheme
+        } else {
+            lightColorScheme
+        },
         shapes = MaterialTheme.shapes,
         typography = Typography,
         content = content
