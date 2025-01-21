@@ -51,9 +51,9 @@ import androidx.tv.material3.Text
 import com.google.jetstream.R
 import com.google.jetstream.data.entities.Movie
 import com.google.jetstream.data.entities.MovieList
-import com.google.jetstream.presentation.common.ImmersiveListMoviesRow
-import com.google.jetstream.presentation.common.ItemDirection
-import com.google.jetstream.presentation.common.PosterImage
+import com.google.jetstream.presentation.components.ImmersiveListMoviesRow
+import com.google.jetstream.presentation.components.ItemDirection
+import com.google.jetstream.presentation.components.PosterImage
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 import com.google.jetstream.presentation.utils.bringIntoViewIfChildrenAreFocused
 

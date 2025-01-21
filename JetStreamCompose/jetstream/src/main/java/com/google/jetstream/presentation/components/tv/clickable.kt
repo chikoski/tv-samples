@@ -1,7 +1,7 @@
-package com.google.jetstream.presentation.common
+package com.google.jetstream.presentation.components.tv
 
 import androidx.compose.foundation.Indication
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.clickable as originalClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.Key
@@ -12,14 +12,14 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.semantics.Role
 
-fun Modifier.tvClickable(
+fun Modifier.clickable(
     enabled: Boolean = true,
     onClickLabel: String? = null,
     role: Role? = null,
     onClick: () -> Unit
-): Modifier = tvClickable(null, null, enabled, onClickLabel, role, onClick)
+): Modifier = clickable(null, null, enabled, onClickLabel, role, onClick)
 
-fun Modifier.tvClickable(
+fun Modifier.clickable(
     interactionSource: MutableInteractionSource?,
     indication: Indication?,
     enabled: Boolean = true,
@@ -34,7 +34,7 @@ fun Modifier.tvClickable(
         } else {
             false
         }
-    }.clickable(
+    }.originalClickable(
         interactionSource = interactionSource,
         indication = indication,
         enabled = enabled,

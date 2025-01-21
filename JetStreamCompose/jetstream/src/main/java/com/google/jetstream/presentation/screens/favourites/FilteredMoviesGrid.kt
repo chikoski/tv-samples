@@ -28,8 +28,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.jetstream.data.entities.MovieList
-import com.google.jetstream.presentation.common.MovieCard
-import com.google.jetstream.presentation.common.PosterImage
+import com.google.jetstream.presentation.components.MovieCard
+import com.google.jetstream.presentation.components.PosterImage
 import com.google.jetstream.presentation.theme.JetStreamBottomListPadding
 
 @Composable

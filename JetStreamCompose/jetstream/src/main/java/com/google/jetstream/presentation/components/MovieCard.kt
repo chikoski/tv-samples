@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.jetstream.presentation.common
+package com.google.jetstream.presentation.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
@@ -22,6 +22,10 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.google.jetstream.presentation.components.tv.Border
+import com.google.jetstream.presentation.components.tv.StandardCardContainer
+import com.google.jetstream.presentation.components.tv.borderIndication
+import com.google.jetstream.presentation.components.tv.clickable
 import com.google.jetstream.presentation.theme.JetStreamBorderWidth
 import com.google.jetstream.presentation.theme.JetStreamCardShape
 
@@ -37,7 +41,7 @@ fun MovieCard(
         title = title,
         imageCard = { interactionSource ->
             Box(
-                modifier = Modifier.tvClickable(
+                modifier = Modifier.clickable(
                     interactionSource = interactionSource,
                     indication = borderIndication(
                         focusedBorder = Border(

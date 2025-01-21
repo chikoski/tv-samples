@@ -1,4 +1,4 @@
-package com.google.jetstream.presentation.common
+package com.google.jetstream.presentation.components.tv
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState

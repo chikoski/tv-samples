@@ -53,8 +53,8 @@ import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import androidx.media3.ui.PlayerView
 import com.google.jetstream.data.entities.MovieDetails
 import com.google.jetstream.data.util.StringConstants
-import com.google.jetstream.presentation.common.Error
-import com.google.jetstream.presentation.common.Loading
+import com.google.jetstream.presentation.components.Error
+import com.google.jetstream.presentation.components.Loading
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerControlsIcon
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerMainFrame
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerMediaTitle
