@@ -47,7 +47,7 @@ private val lightColorScheme @Composable get() = lightColorScheme(
     onError = colorResource(R.color.onError),
     errorContainer = colorResource(R.color.errorContainer),
     onErrorContainer = colorResource(R.color.onErrorContainer),
-    outline = colorResource(R.color.border),
+    outline = colorResource(R.color.outline),
 )
 
 private val darkColorScheme @Composable get() = darkColorScheme(
@@ -73,7 +73,7 @@ private val darkColorScheme @Composable get() = darkColorScheme(
     onError = colorResource(R.color.onError),
     errorContainer = colorResource(R.color.errorContainer),
     onErrorContainer = colorResource(R.color.onErrorContainer),
-    outline = colorResource(R.color.border),
+    outline = colorResource(R.color.outline),
 )
 
 @Composable
