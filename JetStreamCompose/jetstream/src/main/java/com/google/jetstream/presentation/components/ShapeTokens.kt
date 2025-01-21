@@ -1,4 +1,4 @@
-package com.google.jetstream.presentation.common
+package com.google.jetstream.presentation.components
 
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.GenericShape

@@ -39,10 +39,10 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.google.jetstream.data.entities.Movie
 import com.google.jetstream.data.entities.MovieCategoryDetails
-import com.google.jetstream.presentation.common.Error
-import com.google.jetstream.presentation.common.Loading
-import com.google.jetstream.presentation.common.MovieCard
-import com.google.jetstream.presentation.common.PosterImage
+import com.google.jetstream.presentation.components.Error
+import com.google.jetstream.presentation.components.Loading
+import com.google.jetstream.presentation.components.MovieCard
+import com.google.jetstream.presentation.components.PosterImage
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 import com.google.jetstream.presentation.theme.JetStreamBottomListPadding
 import com.google.jetstream.presentation.utils.focusOnInitialVisibility

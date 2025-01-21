@@ -38,9 +38,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.jetstream.data.entities.Movie
 import com.google.jetstream.data.entities.MovieList
 import com.google.jetstream.data.util.StringConstants
-import com.google.jetstream.presentation.common.Error
-import com.google.jetstream.presentation.common.Loading
-import com.google.jetstream.presentation.common.MoviesRow
+import com.google.jetstream.presentation.components.Error
+import com.google.jetstream.presentation.components.Loading
+import com.google.jetstream.presentation.components.MoviesRow
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 
 @Composable

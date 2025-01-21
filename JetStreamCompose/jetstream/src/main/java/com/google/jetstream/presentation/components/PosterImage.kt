@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.jetstream.presentation.common
+package com.google.jetstream.presentation.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

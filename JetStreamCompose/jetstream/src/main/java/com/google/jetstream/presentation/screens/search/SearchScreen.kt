@@ -61,7 +61,7 @@ import androidx.tv.material3.Text
 import com.google.jetstream.R
 import com.google.jetstream.data.entities.Movie
 import com.google.jetstream.data.entities.MovieList
-import com.google.jetstream.presentation.common.MoviesRow
+import com.google.jetstream.presentation.components.MoviesRow
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 import com.google.jetstream.presentation.theme.JetStreamCardShape
 
