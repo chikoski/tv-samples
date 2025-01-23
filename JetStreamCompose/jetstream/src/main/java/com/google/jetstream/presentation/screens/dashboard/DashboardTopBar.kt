@@ -16,6 +16,7 @@
 
 package com.google.jetstream.presentation.screens.dashboard
 
+import android.content.res.Configuration
 import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,6 +43,7 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusRestorer
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -70,6 +72,16 @@ fun DashboardTopBar(
     val focusManager = LocalFocusManager.current
     val tabRow = remember { FocusRequester() }
 
+    val configuration = LocalConfiguration.current
+    val onClickHandler: (Int) -> Unit = remember(configuration) {
+        when(configuration.uiMode) {
+            Configuration.UI_MODE_TYPE_TELEVISION -> {
+                { focusManager.moveFocus(FocusDirection.Down) }
+            }
+            else -> { it -> onTabSelected(it) }
+        }
+    }
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier.focusGroup(),
@@ -91,7 +103,7 @@ fun DashboardTopBar(
         TopBarTabRow(
             tabs = tabs,
             selectedScreenIndex = selectedTabIndex,
-            onClick = { focusManager.moveFocus(FocusDirection.Down) },
+            onClick = onClickHandler,
             onTabSelected = onTabSelected,
             modifier = Modifier
                 .weight(1f)
@@ -118,7 +130,7 @@ fun DashboardTopBar(
 private fun TopBarTabRow(
     tabs: List<Pair<Screens, FocusRequester>>,
     onTabSelected: (Int) -> Unit,
-    onClick: () -> Unit,
+    onClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
     selectedScreenIndex: Int = 0,
 ) {
@@ -132,7 +144,7 @@ private fun TopBarTabRow(
                 TopBarTab(
                     screen = screen,
                     selected = index == selectedScreenIndex,
-                    onClick = onClick,
+                    onClick = { onClick(index) },
                     onSelect = { onTabSelected(index) },
                     modifier = Modifier.focusRequester(focusRequester)
                 )
