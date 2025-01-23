@@ -17,12 +17,12 @@
 package com.google.jetstream.presentation.screens.movies
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
-import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.Text
 
 @Composable
 fun TitleValueText(
