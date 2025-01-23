@@ -72,11 +72,7 @@ fun DashboardTopBar(
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .focusRestorer {
-                tabRow
-            }
-            .focusGroup(),
+        modifier = modifier.focusGroup(),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Box(modifier = Modifier.padding(8.dp)) {
