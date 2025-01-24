@@ -107,7 +107,6 @@ fun SearchResult(
 ) {
     val childPadding = rememberChildPadding()
     var searchQuery by remember { mutableStateOf("") }
-    val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
 
     LazyColumn(
@@ -126,7 +125,6 @@ fun SearchResult(
                         end = childPadding.end,
                         top = 12.dp
                     )
-                    .focusRequester(focusRequester)
                     .onPreviewKeyEvent {
                         if (it.type == KeyEventType.KeyUp) {
                             when (it.key) {
@@ -149,8 +147,6 @@ fun SearchResult(
                         } else {
                             false
                         }
-                    }.onPlaced {
-                        focusRequester.tryRequestFocus()
                     },
                 keyboardOptions = KeyboardOptions(
                     autoCorrectEnabled = false,
