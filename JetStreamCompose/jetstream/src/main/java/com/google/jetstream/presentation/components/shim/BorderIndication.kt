@@ -1,4 +1,4 @@
-package com.google.jetstream.presentation.components.tv
+package com.google.jetstream.presentation.components.shim
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.IndicationNodeFactory

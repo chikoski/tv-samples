@@ -22,10 +22,10 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.google.jetstream.presentation.components.tv.Border
-import com.google.jetstream.presentation.components.tv.StandardCardContainer
-import com.google.jetstream.presentation.components.tv.borderIndication
-import com.google.jetstream.presentation.components.tv.clickable
+import com.google.jetstream.presentation.components.shim.Border
+import com.google.jetstream.presentation.components.shim.StandardCardContainer
+import com.google.jetstream.presentation.components.shim.borderIndication
+import com.google.jetstream.presentation.components.shim.clickable
 import com.google.jetstream.presentation.theme.JetStreamBorderWidth
 import com.google.jetstream.presentation.theme.JetStreamCardShape
 

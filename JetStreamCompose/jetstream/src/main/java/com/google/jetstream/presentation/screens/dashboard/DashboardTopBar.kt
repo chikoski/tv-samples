@@ -52,7 +52,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.google.jetstream.R
 import com.google.jetstream.data.util.StringConstants
-import com.google.jetstream.presentation.components.tv.tvSelectTarget
+import com.google.jetstream.presentation.components.shim.tvSelectTarget
 import com.google.jetstream.presentation.screens.Screens
 import com.google.jetstream.presentation.theme.IconSize
 import com.google.jetstream.presentation.theme.LexendExa

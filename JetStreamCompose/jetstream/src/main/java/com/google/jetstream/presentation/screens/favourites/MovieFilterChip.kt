@@ -33,8 +33,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.jetstream.data.util.StringConstants
-import com.google.jetstream.presentation.components.tv.Border
-import com.google.jetstream.presentation.components.tv.borderIndication
+import com.google.jetstream.presentation.components.shim.Border
+import com.google.jetstream.presentation.components.shim.borderIndication
 import com.google.jetstream.presentation.theme.JetStreamCardShape
 
 @Composable
