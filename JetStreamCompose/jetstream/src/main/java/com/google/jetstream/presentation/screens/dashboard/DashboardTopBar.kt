@@ -17,6 +17,7 @@
 package com.google.jetstream.presentation.screens.dashboard
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -74,10 +75,13 @@ fun DashboardTopBar(
 
     val configuration = LocalConfiguration.current
     val onClickHandler: (Int) -> Unit = remember(configuration) {
-        when(configuration.uiMode) {
+        val nightMode = configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        val uiMode = configuration.uiMode - nightMode
+        when (uiMode) {
             Configuration.UI_MODE_TYPE_TELEVISION -> {
                 { focusManager.moveFocus(FocusDirection.Down) }
             }
+
             else -> { it -> onTabSelected(it) }
         }
     }
