@@ -16,8 +16,8 @@
 
 package com.google.jetstream.presentation.screens.movies
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,7 +28,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -37,15 +40,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.tv.material3.Border
-import androidx.tv.material3.CardDefaults
-import androidx.tv.material3.ClassicCard
-import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.Text
 import com.google.jetstream.R
 import com.google.jetstream.data.entities.MovieCast
+import com.google.jetstream.presentation.components.shim.ClassicCard
+import com.google.jetstream.presentation.components.shim.borderIndication
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
-import com.google.jetstream.presentation.theme.JetStreamBorderWidth
+import com.google.jetstream.presentation.theme.JetStreamBorder
 import com.google.jetstream.presentation.theme.JetStreamCardShape
 import com.google.jetstream.presentation.utils.ourColors
 
@@ -83,21 +83,14 @@ private fun CastAndCrewItem(
     castMember: MovieCast,
     modifier: Modifier = Modifier,
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+
     ClassicCard(
         modifier = modifier
             .padding(end = 20.dp, bottom = 16.dp)
-            .aspectRatio(1 / 1.8f),
-        shape = CardDefaults.shape(shape = JetStreamCardShape),
-        scale = CardDefaults.scale(focusedScale = 1f),
-        border = CardDefaults.border(
-            focusedBorder = Border(
-                border = BorderStroke(
-                    width = JetStreamBorderWidth,
-                    color = MaterialTheme.colorScheme.onSurface
-                ),
-                shape = JetStreamCardShape
-            )
-        ),
+            .aspectRatio(1 / 1.8f)
+            .borderIndication(interactionSource, focusedBorder = JetStreamBorder),
+        shape = JetStreamCardShape,
         title = {
             Text(
                 modifier = Modifier
@@ -130,6 +123,7 @@ private fun CastAndCrewItem(
                     .background(ourColors.random())
             )
         },
-        onClick = {}
+        onClick = {},
+        interactionSource = interactionSource
     )
 }

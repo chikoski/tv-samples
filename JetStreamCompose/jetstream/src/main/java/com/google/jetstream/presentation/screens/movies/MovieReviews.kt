@@ -18,6 +18,9 @@ package com.google.jetstream.presentation.screens.movies
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.focusable
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,22 +32,22 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableSurfaceDefaults
-import androidx.tv.material3.Icon
-import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.Surface
-import androidx.tv.material3.Text
-import androidx.tv.material3.surfaceColorAtElevation
 import com.google.jetstream.R
 import com.google.jetstream.data.entities.MovieReviewsAndRatings
 import com.google.jetstream.data.util.StringConstants
+import com.google.jetstream.presentation.components.shim.Border
+import com.google.jetstream.presentation.components.shim.borderIndication
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 import com.google.jetstream.presentation.theme.JetStreamCardShape
 
@@ -81,74 +84,66 @@ fun MovieReviews(
 @Composable
 private fun Review(
     reviewAndRating: MovieReviewsAndRatings,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-    Surface(
-        onClick = {},
-        tonalElevation = 1.dp,
-        modifier = modifier,
-        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
-        border = ClickableSurfaceDefaults.border(
-            focusedBorder = Border(
-                border = BorderStroke(
-                    width = ReviewItemOutlineWidth,
-                    color = MaterialTheme.colorScheme.onSurface
-                ),
-                shape = JetStreamCardShape
-            )
-        ),
-        shape = ClickableSurfaceDefaults.shape(shape = JetStreamCardShape),
-        colors = ClickableSurfaceDefaults.colors(
-            focusedContainerColor = MaterialTheme.colorScheme.surface,
-            pressedContainerColor = MaterialTheme.colorScheme.surface,
-            focusedContentColor = MaterialTheme.colorScheme.onSurface,
-            pressedContentColor = MaterialTheme.colorScheme.onSurface
-        )
+    val interactionSource = remember { MutableInteractionSource() }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.surface)
+            .focusable(interactionSource = interactionSource)
+            .indication(interactionSource = interactionSource, indication = borderIndication(
+                focusedBorder = Border(
+                    stroke = BorderStroke(
+                        width = ReviewItemOutlineWidth,
+                        color = MaterialTheme.colorScheme.outline,
+                    ),
+                    shape = JetStreamCardShape
+                )
+            ))
+            .then(modifier),
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth(0.3f)
+                    .background(
+                        MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
+                    ),
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = null,
                     modifier = Modifier
-                        .fillMaxHeight()
-                        .fillMaxWidth(0.3f)
-                        .background(
-                            MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
-                        ),
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Star,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .fillMaxSize(0.8f)
-                            .align(Alignment.Center),
-                    )
-                }
-                Column(
-                    modifier = Modifier.padding(start = 16.dp)
-                ) {
-                    Text(
-                        text = reviewAndRating.reviewerName,
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Text(
-                        text = StringConstants
-                            .Composable
-                            .reviewCount(reviewAndRating.reviewCount),
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.alpha(0.75f)
-                    )
-                }
+                        .fillMaxSize(0.8f)
+                        .align(Alignment.Center),
+                )
             }
-            Text(
-                text = reviewAndRating.reviewRating,
-                style = MaterialTheme.typography.headlineLarge,
-                modifier = Modifier.padding(end = 16.dp)
-            )
+            Column(
+                modifier = Modifier.padding(start = 16.dp)
+            ) {
+                Text(
+                    text = reviewAndRating.reviewerName,
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text(
+                    text = StringConstants
+                        .Composable
+                        .reviewCount(reviewAndRating.reviewCount),
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.alpha(0.75f)
+                )
+            }
         }
+        Text(
+            text = reviewAndRating.reviewRating,
+            style = MaterialTheme.typography.headlineLarge,
+            modifier = Modifier.padding(end = 16.dp)
+        )
     }
 }
 

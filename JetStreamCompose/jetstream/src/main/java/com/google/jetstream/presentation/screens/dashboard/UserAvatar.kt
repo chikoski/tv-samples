@@ -16,19 +16,18 @@
 
 package com.google.jetstream.presentation.screens.dashboard
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.tv.material3.Border
-import androidx.tv.material3.Icon
-import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.SelectableSurfaceDefaults
-import androidx.tv.material3.Surface
-import com.google.jetstream.presentation.theme.JetStreamBorderWidth
+import com.google.jetstream.presentation.components.shim.borderIndication
+import com.google.jetstream.presentation.theme.JetStreamBorder
 
 @Composable
 fun UserAvatar(
@@ -36,33 +35,20 @@ fun UserAvatar(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
-    Surface(
-        selected = selected,
+    val interactionSource = remember { MutableInteractionSource() }
+    val border = JetStreamBorder.copy(shape = CircleShape)
+
+    IconButton(
         onClick = onClick,
-        shape = SelectableSurfaceDefaults.shape(shape = CircleShape),
-        border = SelectableSurfaceDefaults.border(
-            focusedBorder = Border(
-                border = BorderStroke(
-                    width = JetStreamBorderWidth,
-                    color = MaterialTheme.colorScheme.onSurface
-                ),
-                shape = CircleShape
-            ),
-            selectedBorder = Border(
-                border = BorderStroke(
-                    width = JetStreamBorderWidth,
-                    color = MaterialTheme.colorScheme.primary
-                ),
-                shape = CircleShape
-            ),
-        ),
-        scale = SelectableSurfaceDefaults.scale(focusedScale = 1f),
         modifier = modifier,
+        interactionSource = interactionSource
     ) {
         Icon(
             imageVector = Icons.Default.AccountCircle,
             contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
+            modifier = modifier
+                .fillMaxSize()
+                .borderIndication(interactionSource = interactionSource, focusedBorder = border),
         )
     }
 }

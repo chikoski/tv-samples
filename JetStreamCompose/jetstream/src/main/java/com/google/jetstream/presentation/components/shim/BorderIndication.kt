@@ -2,6 +2,7 @@ package com.google.jetstream.presentation.components.shim
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.IndicationNodeFactory
+import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.FocusInteraction
 import androidx.compose.foundation.interaction.HoverInteraction
 import androidx.compose.foundation.interaction.InteractionSource
@@ -23,6 +24,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.google.jetstream.presentation.components.ShapeTokens
 import kotlinx.coroutines.launch
+
+fun Modifier.borderIndication(
+    interactionSource: InteractionSource,
+    focusedBorder: Border = Border.None,
+    pressedBorder: Border = focusedBorder,
+    hoveredBorder: Border = focusedBorder,
+): Modifier =
+    indication(interactionSource, borderIndication(focusedBorder, pressedBorder, hoveredBorder))
 
 
 fun borderIndication(

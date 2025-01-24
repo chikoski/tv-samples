@@ -16,8 +16,12 @@
 
 package com.google.jetstream.presentation.theme
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ShapeDefaults
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ShapeDefaults
+import com.google.jetstream.presentation.components.shim.Border
 
 val JetStreamCardShape = ShapeDefaults.ExtraSmall
 val JetStreamButtonShape = ShapeDefaults.ExtraSmall
@@ -28,3 +32,14 @@ val JetStreamBorderWidth = 3.dp
  * Space to be given below every Lazy (or scrollable) vertical list throughout the app
  */
 val JetStreamBottomListPadding = 28.dp
+
+val JetStreamBorder
+    @Composable get() =
+        Border(
+        stroke = BorderStroke(
+            width = JetStreamBorderWidth,
+            color = MaterialTheme.colorScheme.onSurface
+        ),
+        shape = JetStreamCardShape
+
+    )

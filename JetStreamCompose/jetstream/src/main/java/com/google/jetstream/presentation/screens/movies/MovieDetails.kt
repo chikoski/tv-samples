@@ -16,7 +16,10 @@
 
 package com.google.jetstream.presentation.screens.movies
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,6 +33,11 @@ import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.PlayArrow
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -46,17 +54,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.tv.material3.Button
-import androidx.tv.material3.ButtonDefaults
-import androidx.tv.material3.Icon
-import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.jetstream.R
 import com.google.jetstream.data.entities.MovieDetails
 import com.google.jetstream.data.util.StringConstants
+import com.google.jetstream.presentation.components.shim.Border
+import com.google.jetstream.presentation.components.shim.borderIndication
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
+import com.google.jetstream.presentation.theme.JetStreamBorderWidth
 import com.google.jetstream.presentation.theme.JetStreamButtonShape
 import kotlinx.coroutines.launch
 
@@ -125,11 +131,24 @@ private fun WatchTrailerButton(
     modifier: Modifier = Modifier,
     goToMoviePlayer: () -> Unit
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
     Button(
         onClick = goToMoviePlayer,
-        modifier = modifier.padding(top = 24.dp),
+        modifier = modifier.padding(top = 24.dp).indication(
+            interactionSource = interactionSource,
+            indication = borderIndication(
+                focusedBorder = Border(
+                    stroke = BorderStroke(
+                        width = JetStreamBorderWidth,
+                        color = MaterialTheme.colorScheme.outline
+                    ),
+                    shape = JetStreamButtonShape
+                )
+            )
+        ),
         contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
-        shape = ButtonDefaults.shape(shape = JetStreamButtonShape)
+        interactionSource = interactionSource,
+        shape = JetStreamButtonShape
     ) {
         Icon(
             imageVector = Icons.Outlined.PlayArrow,

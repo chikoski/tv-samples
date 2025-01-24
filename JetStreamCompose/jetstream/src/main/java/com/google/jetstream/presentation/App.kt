@@ -68,7 +68,7 @@ fun App(
             composable(
                 route = Screens.MovieDetails(),
                 arguments = listOf(
-                    navArgument(MovieDetailsScreen.MovieIdBundleKey) {
+                    navArgument(MovieDetailsScreen.MOVIE_ID_BUNDLE_KEY) {
                         type = NavType.StringType
                     }
                 )
