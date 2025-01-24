@@ -16,23 +16,24 @@
 
 package com.google.jetstream.presentation.screens.profile
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.Icon
-import androidx.tv.material3.ListItem
-import androidx.tv.material3.ListItemDefaults
-import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.Text
-import androidx.tv.material3.surfaceColorAtElevation
 import com.google.jetstream.R
 import com.google.jetstream.data.util.StringConstants
-import com.google.jetstream.presentation.theme.JetStreamCardShape
+import com.google.jetstream.presentation.components.shim.clickable
 
 @Composable
 fun LanguageSection(
@@ -49,11 +50,16 @@ fun LanguageSection(
             }
             items(LanguageSectionItems.size) { index ->
                 ListItem(
-                    modifier = Modifier.padding(top = 16.dp),
-                    selected = false,
-                    onClick = { onSelectedIndexChange(index) },
-                    trailingContent = if (selectedIndex == index) {
-                        {
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = ripple()
+                        ) {
+                            onSelectedIndexChange(index)
+                        },
+                    trailingContent = {
+                        if (selectedIndex == index) {
                             Icon(
                                 Icons.Default.Check,
                                 contentDescription = stringResource(
@@ -63,17 +69,13 @@ fun LanguageSection(
                                 )
                             )
                         }
-                    } else null,
+                    },
                     headlineContent = {
                         Text(
                             text = LanguageSectionItems[index],
                             style = MaterialTheme.typography.titleMedium
                         )
                     },
-                    colors = ListItemDefaults.colors(
-                        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
-                    ),
-                    shape = ListItemDefaults.shape(shape = JetStreamCardShape)
                 )
             }
         }

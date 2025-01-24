@@ -24,14 +24,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.Text
 import com.google.jetstream.data.util.StringConstants
 
 @Composable
@@ -60,7 +60,7 @@ fun AboutSection() {
                     .padding(top = 16.dp)
                     .fillMaxWidth()
                     .height(2.dp)
-                    .background(MaterialTheme.colorScheme.border.copy(alpha = 0.6f))
+                    .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.6f))
             )
             Text(
                 modifier = Modifier

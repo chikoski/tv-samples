@@ -37,6 +37,11 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ProvideTextStyle
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -69,12 +74,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
-import androidx.tv.material3.ColorScheme
-import androidx.tv.material3.ExperimentalTvMaterial3Api
-import androidx.tv.material3.LocalContentColor
-import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.ProvideTextStyle
-import androidx.tv.material3.surfaceColorAtElevation
 import kotlin.math.max
 
 /**
@@ -111,7 +110,6 @@ import kotlin.math.max
  */
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
-@ExperimentalTvMaterial3Api
 @Composable
 fun StandardDialog(
     showDialog: Boolean,
@@ -130,6 +128,8 @@ fun StandardDialog(
     properties: DialogProperties = DialogProperties(),
     confirmButton: @Composable () -> Unit
 ) {
+    MaterialTheme.colorScheme
+
     val elevatedContainerColor = MaterialTheme.colorScheme.applyTonalElevation(
         backgroundColor = containerColor,
         elevation = tonalElevation
@@ -237,7 +237,6 @@ fun StandardDialog(
  */
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
-@ExperimentalTvMaterial3Api
 @Composable
 fun FullScreenDialog(
     showDialog: Boolean,
@@ -341,7 +340,6 @@ fun FullScreenDialog(
 /**
  * A state object that can be hoisted to control and observe a [Dialog]'s animation progress.
  */
-@ExperimentalTvMaterial3Api
 class DialogState {
     /**
      * Current animation progress of the [Dialog]. This value will range between 0f and 1f. This
@@ -371,7 +369,6 @@ class DialogState {
  * @param content Slot for dialog content such as [StandardDialog], [FullScreenDialog], etc.
  */
 @ExperimentalComposeUiApi
-@ExperimentalTvMaterial3Api
 @Composable
 fun Dialog(
     showDialog: Boolean,
@@ -484,7 +481,7 @@ internal fun DialogFlowRow(
         // Return whether the placeable can be added to the current sequence.
         fun canAddToCurrentSequence(placeable: Placeable) =
             currentSequence.isEmpty() || currentMainAxisSize + mainAxisSpacing.roundToPx() +
-                placeable.width <= constraints.maxWidth
+                    placeable.width <= constraints.maxWidth
 
         // Store current sequence information and start a new sequence.
         fun startNewSequence() {
@@ -531,7 +528,7 @@ internal fun DialogFlowRow(
             sequences.forEachIndexed { i, placeables ->
                 val childrenMainAxisSizes = IntArray(placeables.size) { j ->
                     placeables[j].width +
-                        if (j < placeables.lastIndex) mainAxisSpacing.roundToPx() else 0
+                            if (j < placeables.lastIndex) mainAxisSpacing.roundToPx() else 0
                 }
                 val arrangement = Arrangement.Bottom
                 // Handle vertical direction
@@ -572,7 +569,6 @@ private fun Modifier.dialogFocusable() = composed {
     )
 }
 
-@ExperimentalTvMaterial3Api
 object StandardDialogDefaults {
     internal val DialogMinWidth = 280.dp
     internal val DialogMaxWidth = 560.dp
@@ -631,7 +627,6 @@ object StandardDialogDefaults {
     val TonalElevation: Dp = Elevation.Level2
 }
 
-@ExperimentalTvMaterial3Api
 object FullScreenDialogDefaults {
     internal val ButtonSpacing = 16.dp
     internal val DescriptionPadding = PaddingValues(top = 48.dp)
@@ -763,7 +758,6 @@ private object Elevation {
     val Level5 = 12.0.dp
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 private fun ColorScheme.applyTonalElevation(backgroundColor: Color, elevation: Dp): Color {
     return if (backgroundColor == surface) {
         surfaceColorAtElevation(elevation)

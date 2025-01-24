@@ -16,25 +16,24 @@
 
 package com.google.jetstream.presentation.screens.profile
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ExperimentalTvMaterial3Api
-import androidx.tv.material3.Icon
-import androidx.tv.material3.ListItem
-import androidx.tv.material3.ListItemDefaults
-import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.Text
-import androidx.tv.material3.surfaceColorAtElevation
 import com.google.jetstream.data.util.StringConstants
 import com.google.jetstream.presentation.theme.JetStreamCardShape
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun HelpAndSupportSection() {
     with(StringConstants.Composable.Placeholders) {
@@ -59,9 +58,7 @@ private fun HelpAndSupportSectionItem(
     value: String? = null
 ) {
     ListItem(
-        modifier = Modifier.padding(top = 16.dp),
-        selected = false,
-        onClick = {},
+        modifier = Modifier.padding(top = 16.dp).clickable {  },
         trailingContent = {
             value?.let { nnValue ->
                 Text(
@@ -71,7 +68,6 @@ private fun HelpAndSupportSectionItem(
             } ?: run {
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowForwardIos,
-                    modifier = Modifier.size(ListItemDefaults.IconSizeDense),
                     contentDescription = StringConstants
                         .Composable
                         .Placeholders
@@ -86,10 +82,7 @@ private fun HelpAndSupportSectionItem(
             )
         },
         colors = ListItemDefaults.colors(
-            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp),
-            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            focusedContentColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
         ),
-        shape = ListItemDefaults.shape(shape = JetStreamCardShape)
     )
 }

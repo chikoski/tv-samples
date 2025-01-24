@@ -16,6 +16,9 @@
 
 package com.google.jetstream.presentation.screens.profile
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,6 +26,10 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
@@ -30,32 +37,22 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.tv.material3.ClickableSurfaceDefaults
-import androidx.tv.material3.ExperimentalTvMaterial3Api
-import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.Surface
-import androidx.tv.material3.Text
-import androidx.tv.material3.surfaceColorAtElevation
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun AccountsSelectionItem(
-    modifier: Modifier = Modifier,
-    key: Any?,
     accountsSectionData: AccountsSectionData,
+    modifier: Modifier = Modifier,
+    key: Any? = null,
 ) {
     key(key) {
         Surface(
-            onClick = accountsSectionData.onClick,
             modifier = modifier
                 .padding(8.dp)
                 .fillMaxWidth()
-                .aspectRatio(2f),
-            colors = ClickableSurfaceDefaults.colors(
-                containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
-            ),
-            shape = ClickableSurfaceDefaults.shape(shape = MaterialTheme.shapes.extraSmall),
-            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
+                .aspectRatio(2f)
+                .background(MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp))
+                .clickable(onClick = accountsSectionData.onClick),
+            shape = MaterialTheme.shapes.extraSmall,
         ) {
             Column(
                 modifier = Modifier

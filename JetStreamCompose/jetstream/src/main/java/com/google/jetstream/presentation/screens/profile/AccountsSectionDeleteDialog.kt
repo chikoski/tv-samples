@@ -18,21 +18,24 @@ package com.google.jetstream.presentation.screens.profile
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ExperimentalTvMaterial3Api
-import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.Text
 import com.google.jetstream.R
+import com.google.jetstream.presentation.components.shim.tryRequestFocus
 import com.google.jetstream.presentation.theme.JetStreamCardShape
 import com.google.jetstream.tvmaterial.StandardDialog
 
 @OptIn(
     ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class,
-    ExperimentalTvMaterial3Api::class
 )
 @Composable
 fun AccountsSectionDeleteDialog(
@@ -40,15 +43,20 @@ fun AccountsSectionDeleteDialog(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val confirmButton = remember{ FocusRequester() }
+
+    LaunchedEffect(Unit) {
+        confirmButton.tryRequestFocus()
+    }
+
     StandardDialog(
         showDialog = showDialog,
         modifier = modifier,
         onDismissRequest = onDismissRequest,
         confirmButton = {
             AccountsSectionDialogButton(
-                modifier = Modifier.padding(start = 8.dp),
+                modifier = Modifier.padding(start = 8.dp).focusRequester(confirmButton),
                 text = stringResource(R.string.yes_delete_account),
-                shouldRequestFocus = true,
                 onClick = onDismissRequest
             )
         },
@@ -56,7 +64,6 @@ fun AccountsSectionDeleteDialog(
             AccountsSectionDialogButton(
                 modifier = Modifier.padding(end = 8.dp),
                 text = stringResource(R.string.no_keep_it),
-                shouldRequestFocus = false,
                 onClick = onDismissRequest
             )
         },
