@@ -21,7 +21,11 @@ import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -29,11 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ClickableSurfaceDefaults
-import androidx.tv.material3.Icon
-import androidx.tv.material3.LocalContentColor
-import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.Surface
+import com.google.jetstream.presentation.components.shim.scaleIndication
 
 @Composable
 fun VideoPlayerControlsIcon(
@@ -53,14 +53,14 @@ fun VideoPlayerControlsIcon(
         }
     }
 
-    Surface(
-        modifier = modifier.size(40.dp),
+    IconButton(
         onClick = onClick,
-        shape = ClickableSurfaceDefaults.shape(shape = CircleShape),
-        colors = ClickableSurfaceDefaults.colors(
+        modifier = modifier
+            .size(40.dp)
+            .scaleIndication(interactionSource),
+        colors = IconButtonDefaults.iconButtonColors(
             containerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
         ),
-        scale = ClickableSurfaceDefaults.scale(focusedScale = 1.05f),
         interactionSource = interactionSource
     ) {
         Icon(

@@ -29,9 +29,7 @@ import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.surfaceColorAtElevation
 import com.google.jetstream.data.util.StringConstants
-import com.google.jetstream.presentation.theme.JetStreamCardShape
 
 @Composable
 fun SubtitlesSection(
@@ -45,9 +43,11 @@ fun SubtitlesSection(
                 style = MaterialTheme.typography.headlineSmall
             )
             ListItem(
-                modifier = Modifier.padding(top = 16.dp).clickable {
-                    onSubtitleCheckChange(!isSubtitlesChecked)
-                },
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .clickable {
+                        onSubtitleCheckChange(!isSubtitlesChecked)
+                    },
                 trailingContent = {
                     Switch(
                         checked = isSubtitlesChecked,
@@ -69,7 +69,9 @@ fun SubtitlesSection(
                 ),
             )
             ListItem(
-                modifier = Modifier.padding(top = 16.dp).clickable {  },
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .clickable { },
                 trailingContent = {
                     Text(
                         text = SubtitlesSectionLanguageValue,
