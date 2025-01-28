@@ -38,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -55,6 +56,10 @@ import com.google.jetstream.data.entities.MovieDetails
 import com.google.jetstream.data.util.StringConstants
 import com.google.jetstream.presentation.components.Error
 import com.google.jetstream.presentation.components.Loading
+import com.google.jetstream.presentation.components.shim.FormFactor
+import com.google.jetstream.presentation.components.shim.UiMode
+import com.google.jetstream.presentation.components.shim.clickable
+import com.google.jetstream.presentation.components.shim.onSpaceBarPressed
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerControlsIcon
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerMainFrame
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerMediaTitle
@@ -69,8 +74,8 @@ import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPla
 import com.google.jetstream.presentation.screens.videoPlayer.components.rememberVideoPlayerPulseState
 import com.google.jetstream.presentation.screens.videoPlayer.components.rememberVideoPlayerState
 import com.google.jetstream.presentation.utils.handleDPadKeyEvents
-import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 object VideoPlayerScreen {
     const val MovieIdBundleKey = "movieId"
@@ -94,9 +99,11 @@ fun VideoPlayerScreen(
         is VideoPlayerScreenUiState.Loading -> {
             Loading(modifier = Modifier.fillMaxSize())
         }
+
         is VideoPlayerScreenUiState.Error -> {
             Error(modifier = Modifier.fillMaxSize())
         }
+
         is VideoPlayerScreenUiState.Done -> {
             VideoPlayerScreenContent(
                 movieDetails = s.movieDetails,
@@ -111,6 +118,11 @@ fun VideoPlayerScreen(
 fun VideoPlayerScreenContent(movieDetails: MovieDetails, onBackPressed: () -> Unit) {
     val context = LocalContext.current
     val videoPlayerState = rememberVideoPlayerState(hideSeconds = 4)
+
+    val configuration = LocalConfiguration.current
+    val uiMode = remember(configuration.uiMode) {
+        UiMode.from(configuration)
+    }
 
     // TODO: Move to ViewModel for better reuse
     val exoPlayer = rememberExoPlayer(context)
@@ -151,15 +163,15 @@ fun VideoPlayerScreenContent(movieDetails: MovieDetails, onBackPressed: () -> Un
 
     val pulseState = rememberVideoPlayerPulseState()
 
-    Box(
-        Modifier
-            .dPadEvents(
-                exoPlayer,
-                videoPlayerState,
-                pulseState
-            )
+    val boxModifier = when (uiMode.formFactor) {
+        FormFactor.Tv -> Modifier
+            .dPadEvents(exoPlayer, videoPlayerState, pulseState)
             .focusable()
-    ) {
+
+        else -> Modifier.onClick(exoPlayer, videoPlayerState, pulseState)
+    }
+
+    Box(modifier = boxModifier) {
         AndroidView(
             factory = {
                 PlayerView(context).apply { useController = false }
@@ -280,6 +292,31 @@ private fun rememberExoPlayer(context: Context) = remember {
             repeatMode = Player.REPEAT_MODE_ONE
         }
 }
+
+private fun Modifier.onClick(
+    exoPlayer: ExoPlayer,
+    videoPlayerState: VideoPlayerState,
+    pulseState: VideoPlayerPulseState
+): Modifier =
+    // ToDo: Remove the onSpaceBarPress modifier when Compose 1.8 is released
+    onSpaceBarPressed {
+        exoPlayer.pause()
+        videoPlayerState.showControls()
+    }.clickable {
+        when {
+            !videoPlayerState.controlsVisible -> {
+                videoPlayerState.showControls()
+            }
+
+            exoPlayer.isPlaying -> {
+                exoPlayer.pause()
+            }
+
+            else -> {
+                exoPlayer.play()
+            }
+        }
+    }
 
 private fun Modifier.dPadEvents(
     exoPlayer: ExoPlayer,

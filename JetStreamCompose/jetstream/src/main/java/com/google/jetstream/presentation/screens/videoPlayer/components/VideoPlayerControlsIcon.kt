@@ -33,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.google.jetstream.presentation.components.shim.onSpaceBarPressed
 import com.google.jetstream.presentation.components.shim.scaleIndication
 
 @Composable
@@ -57,7 +58,8 @@ fun VideoPlayerControlsIcon(
         onClick = onClick,
         modifier = modifier
             .size(40.dp)
-            .scaleIndication(interactionSource),
+            .scaleIndication(interactionSource)
+            .onSpaceBarPressed(onClick), // ToDo: remove when Compose 1.8.0 is available
         colors = IconButtonDefaults.iconButtonColors(
             containerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
         ),
