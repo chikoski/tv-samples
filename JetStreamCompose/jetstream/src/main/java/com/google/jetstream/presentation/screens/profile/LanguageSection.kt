@@ -16,6 +16,7 @@
 
 package com.google.jetstream.presentation.screens.profile
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -33,7 +34,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.jetstream.R
 import com.google.jetstream.data.util.StringConstants
-import com.google.jetstream.presentation.components.shim.clickable
 
 @Composable
 fun LanguageSection(

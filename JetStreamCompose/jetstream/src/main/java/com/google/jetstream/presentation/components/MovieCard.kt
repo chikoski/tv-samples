@@ -17,6 +17,7 @@
 package com.google.jetstream.presentation.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.material3.MaterialTheme
@@ -25,7 +26,6 @@ import androidx.compose.ui.Modifier
 import com.google.jetstream.presentation.components.shim.Border
 import com.google.jetstream.presentation.components.shim.StandardCardContainer
 import com.google.jetstream.presentation.components.shim.borderIndication
-import com.google.jetstream.presentation.components.shim.clickable
 import com.google.jetstream.presentation.theme.JetStreamBorderWidth
 import com.google.jetstream.presentation.theme.JetStreamCardShape
 

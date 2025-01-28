@@ -19,6 +19,7 @@ package com.google.jetstream.presentation.screens.videoPlayer
 import android.content.Context
 import android.net.Uri
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -58,7 +59,6 @@ import com.google.jetstream.presentation.components.Error
 import com.google.jetstream.presentation.components.Loading
 import com.google.jetstream.presentation.components.shim.FormFactor
 import com.google.jetstream.presentation.components.shim.UiMode
-import com.google.jetstream.presentation.components.shim.clickable
 import com.google.jetstream.presentation.components.shim.onSpaceBarPressed
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerControlsIcon
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerMainFrame
