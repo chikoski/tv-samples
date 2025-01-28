@@ -53,6 +53,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.google.jetstream.R
 import com.google.jetstream.data.util.StringConstants
+import com.google.jetstream.presentation.components.shim.FormFactor
+import com.google.jetstream.presentation.components.shim.UiMode
 import com.google.jetstream.presentation.components.shim.tvSelectTarget
 import com.google.jetstream.presentation.screens.Screens
 import com.google.jetstream.presentation.theme.IconSize
@@ -74,11 +76,10 @@ fun DashboardTopBar(
     val tabRow = remember { FocusRequester() }
 
     val configuration = LocalConfiguration.current
-    val onClickHandler: (Int) -> Unit = remember(configuration) {
-        val nightMode = configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        val uiMode = configuration.uiMode - nightMode
-        when (uiMode) {
-            Configuration.UI_MODE_TYPE_TELEVISION -> {
+    val onClickHandler: (Int) -> Unit = remember(configuration.uiMode) {
+        val uiMode = UiMode.from(configuration)
+        when (uiMode.formFactor) {
+            FormFactor.Tv -> {
                 { focusManager.moveFocus(FocusDirection.Down) }
             }
 
