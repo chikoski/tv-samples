@@ -39,7 +39,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -58,8 +57,8 @@ import com.google.jetstream.data.util.StringConstants
 import com.google.jetstream.presentation.components.Error
 import com.google.jetstream.presentation.components.Loading
 import com.google.jetstream.presentation.components.shim.FormFactor
-import com.google.jetstream.presentation.components.shim.UiMode
 import com.google.jetstream.presentation.components.shim.onSpaceBarPressed
+import com.google.jetstream.presentation.components.shim.rememberUiMode
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerControlsIcon
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerMainFrame
 import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPlayerMediaTitle
@@ -74,8 +73,8 @@ import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPla
 import com.google.jetstream.presentation.screens.videoPlayer.components.rememberVideoPlayerPulseState
 import com.google.jetstream.presentation.screens.videoPlayer.components.rememberVideoPlayerState
 import com.google.jetstream.presentation.utils.handleDPadKeyEvents
-import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 object VideoPlayerScreen {
     const val MovieIdBundleKey = "movieId"
@@ -119,10 +118,7 @@ fun VideoPlayerScreenContent(movieDetails: MovieDetails, onBackPressed: () -> Un
     val context = LocalContext.current
     val videoPlayerState = rememberVideoPlayerState(hideSeconds = 4)
 
-    val configuration = LocalConfiguration.current
-    val uiMode = remember(configuration.uiMode) {
-        UiMode.from(configuration)
-    }
+    val uiMode = rememberUiMode()
 
     // TODO: Move to ViewModel for better reuse
     val exoPlayer = rememberExoPlayer(context)

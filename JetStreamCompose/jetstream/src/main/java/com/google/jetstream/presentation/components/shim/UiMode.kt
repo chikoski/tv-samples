@@ -17,6 +17,9 @@
 package com.google.jetstream.presentation.components.shim
 
 import android.content.res.Configuration
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalConfiguration
 
 enum class FormFactor {
     Undefined,
@@ -67,5 +70,13 @@ class UiMode(val formFactor: FormFactor, val nightMode: NightMode) {
                 else -> FormFactor.Undefined
             }
         }
+    }
+}
+
+@Composable
+fun rememberUiMode(): UiMode {
+    val configuration = LocalConfiguration.current
+    return remember(configuration.uiMode) {
+        UiMode.from(configuration)
     }
 }

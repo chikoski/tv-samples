@@ -42,7 +42,6 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusRestorer
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -52,7 +51,7 @@ import androidx.compose.ui.unit.dp
 import com.google.jetstream.R
 import com.google.jetstream.data.util.StringConstants
 import com.google.jetstream.presentation.components.shim.FormFactor
-import com.google.jetstream.presentation.components.shim.UiMode
+import com.google.jetstream.presentation.components.shim.rememberUiMode
 import com.google.jetstream.presentation.components.shim.tvSelectTarget
 import com.google.jetstream.presentation.screens.Screens
 import com.google.jetstream.presentation.theme.IconSize
@@ -73,9 +72,8 @@ fun DashboardTopBar(
     val focusManager = LocalFocusManager.current
     val tabRow = remember { FocusRequester() }
 
-    val configuration = LocalConfiguration.current
-    val onClickHandler: (Int) -> Unit = remember(configuration.uiMode) {
-        val uiMode = UiMode.from(configuration)
+    val uiMode = rememberUiMode()
+    val onClickHandler: (Int) -> Unit = remember(uiMode) {
         when (uiMode.formFactor) {
             FormFactor.Tv -> {
                 { focusManager.moveFocus(FocusDirection.Down) }
