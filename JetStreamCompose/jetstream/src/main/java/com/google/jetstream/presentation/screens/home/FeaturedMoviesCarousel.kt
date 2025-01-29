@@ -325,7 +325,7 @@ private fun Modifier.dragDirectionDetector(state: FeaturedCarouselState) =
 
                     val horizontalDifference =
                         (upEventOrCancellation.position - downEvent.position).x
-                    if (horizontalDifference > 0) {
+                    if (horizontalDifference < 0) {
                         state.moveToNextItem()
                     } else {
                         state.moveToPreviousItem()
