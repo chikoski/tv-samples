@@ -23,6 +23,8 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -56,11 +58,16 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.PointerInputChange
+import androidx.compose.ui.input.pointer.changedToUp
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastAll
 import androidx.tv.material3.Carousel
 import androidx.tv.material3.CarouselDefaults
 import androidx.tv.material3.CarouselState
@@ -73,12 +80,38 @@ import com.google.jetstream.presentation.theme.JetStreamBorderWidth
 import com.google.jetstream.presentation.theme.JetStreamButtonShape
 import com.google.jetstream.presentation.utils.Padding
 import com.google.jetstream.presentation.utils.handleDPadKeyEvents
+import kotlinx.coroutines.coroutineScope
 
 @OptIn(ExperimentalTvMaterial3Api::class)
-val CarouselSaver = Saver<CarouselState, Int>(
-    save = { it.activeItemIndex },
-    restore = { CarouselState(it) }
-)
+internal class FeaturedCarouselState(
+    private val itemCount: Int,
+    initialActiveIndex: Int = 0
+) {
+
+    var carouselState by mutableStateOf(CarouselState(initialActiveIndex))
+        private set
+
+    val activeItemIndex: Int
+        get() = carouselState.activeItemIndex
+
+    fun moveToNextItem() {
+        val updatedIndex = (activeItemIndex + 1) % itemCount
+        carouselState = CarouselState(updatedIndex)
+    }
+
+    fun moveToPreviousItem() {
+        val updatedIndex = (activeItemIndex - 1 + itemCount) % itemCount
+        carouselState = CarouselState(updatedIndex)
+    }
+
+    companion object {
+        val Saver = Saver<FeaturedCarouselState, Pair<Int, Int>>(
+            save = { it.itemCount to it.activeItemIndex },
+            restore = { FeaturedCarouselState(it.first, it.second) }
+        )
+    }
+
+}
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
@@ -88,7 +121,9 @@ fun FeaturedMoviesCarousel(
     goToVideoPlayer: (movie: Movie) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val carouselState = rememberSaveable(saver = CarouselSaver) { CarouselState(0) }
+    val featuredCarouselState = rememberSaveable(movies, saver = FeaturedCarouselState.Saver) {
+        FeaturedCarouselState(movies.size)
+    }
     var isCarouselFocused by remember { mutableStateOf(false) }
     val alpha = if (isCarouselFocused) {
         1f
@@ -114,14 +149,16 @@ fun FeaturedMoviesCarousel(
                     StringConstants.Composable.ContentDescription.MoviesCarousel
             }
             .handleDPadKeyEvents(onEnter = {
-                goToVideoPlayer(movies[carouselState.activeItemIndex])
-            }),
+                goToVideoPlayer(movies[featuredCarouselState.activeItemIndex])
+            })
+            .dragDirectionDetector(featuredCarouselState)
+        ,
         itemCount = movies.size,
-        carouselState = carouselState,
+        carouselState = featuredCarouselState.carouselState,
         carouselIndicator = {
             CarouselIndicator(
                 itemCount = movies.size,
-                activeItemIndex = carouselState.activeItemIndex
+                activeItemIndex = featuredCarouselState.activeItemIndex,
             )
         },
         contentTransformStartToEnd = fadeIn(tween(durationMillis = 1000))
@@ -268,3 +305,29 @@ private fun WatchNowButton() {
         )
     }
 }
+
+private fun Modifier.dragDirectionDetector(state: FeaturedCarouselState) =
+    this then
+            Modifier.pointerInput(state) {
+                coroutineScope {
+                    awaitEachGesture {
+                        val downEvent =
+                            awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
+                        var upEventOrCancellation: PointerInputChange? = null
+                        while (upEventOrCancellation == null) {
+                            val event = awaitPointerEvent(pass = PointerEventPass.Initial)
+                            if (event.changes.fastAll { it.changedToUp() }) {
+                                // All pointers are up
+                                upEventOrCancellation = event.changes[0]
+                            }
+                        }
+
+                        val horizontalDifference = (upEventOrCancellation.position - downEvent.position).x
+                        if (horizontalDifference > 0) {
+                            state.moveToNextItem()
+                        } else {
+                            state.moveToPreviousItem()
+                        }
+                    }
+                }
+            }
