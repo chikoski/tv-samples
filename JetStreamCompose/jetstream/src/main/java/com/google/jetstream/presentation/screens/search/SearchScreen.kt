@@ -16,8 +16,6 @@
 
 package com.google.jetstream.presentation.screens.search
 
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -39,14 +37,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
-import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -57,7 +52,6 @@ import com.google.jetstream.R
 import com.google.jetstream.data.entities.Movie
 import com.google.jetstream.data.entities.MovieList
 import com.google.jetstream.presentation.components.MoviesRow
-import com.google.jetstream.presentation.components.shim.tryRequestFocus
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 
 @Composable
@@ -70,7 +64,7 @@ fun SearchScreen(
     val shouldShowTopBar by remember {
         derivedStateOf {
             lazyColumnState.firstVisibleItemIndex == 0 &&
-                    lazyColumnState.firstVisibleItemScrollOffset < 100
+                lazyColumnState.firstVisibleItemScrollOffset < 100
         }
     }
 
@@ -117,7 +111,9 @@ fun SearchResult(
             TextField(
                 value = searchQuery,
                 onValueChange = { searchQuery = it },
-                placeholder = { Text(text = stringResource(R.string.search_screen_et_placeholder)) },
+                placeholder = {
+                    Text(text = stringResource(R.string.search_screen_et_placeholder))
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(

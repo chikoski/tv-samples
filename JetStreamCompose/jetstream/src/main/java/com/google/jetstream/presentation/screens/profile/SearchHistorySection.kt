@@ -46,7 +46,7 @@ fun SearchHistorySection() {
                     )
                     Button(
                         onClick = { /* Clear search history */ },
-                        modifier = Modifier.clickable{ }
+                        modifier = Modifier.clickable { }
                     ) {
                         Text(text = SearchHistoryClearAll)
                     }
@@ -54,7 +54,7 @@ fun SearchHistorySection() {
             }
             items(SampleSearchHistory.size) { index ->
                 ListItem(
-                    modifier = Modifier.padding(top = 8.dp).clickable {  },
+                    modifier = Modifier.padding(top = 8.dp).clickable { },
                     headlineContent = {
                         Text(
                             text = SampleSearchHistory[index],

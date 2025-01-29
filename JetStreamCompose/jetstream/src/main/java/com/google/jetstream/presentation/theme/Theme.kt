@@ -81,7 +81,7 @@ fun JetStreamTheme(
     content: @Composable () -> Unit
 ) {
     MaterialTheme(
-        colorScheme = if(isSystemInDarkTheme()) {
+        colorScheme = if (isSystemInDarkTheme()) {
             darkColorScheme
         } else {
             lightColorScheme

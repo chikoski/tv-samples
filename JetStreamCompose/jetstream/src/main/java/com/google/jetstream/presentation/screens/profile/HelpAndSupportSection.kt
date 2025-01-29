@@ -19,7 +19,6 @@ package com.google.jetstream.presentation.screens.profile
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material3.Icon
@@ -32,7 +31,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.jetstream.data.util.StringConstants
-import com.google.jetstream.presentation.theme.JetStreamCardShape
 
 @Composable
 fun HelpAndSupportSection() {
@@ -58,7 +56,7 @@ private fun HelpAndSupportSectionItem(
     value: String? = null
 ) {
     ListItem(
-        modifier = Modifier.padding(top = 16.dp).clickable {  },
+        modifier = Modifier.padding(top = 16.dp).clickable { },
         trailingContent = {
             value?.let { nnValue ->
                 Text(

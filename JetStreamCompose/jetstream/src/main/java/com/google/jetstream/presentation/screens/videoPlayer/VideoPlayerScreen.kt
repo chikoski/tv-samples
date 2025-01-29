@@ -74,8 +74,8 @@ import com.google.jetstream.presentation.screens.videoPlayer.components.VideoPla
 import com.google.jetstream.presentation.screens.videoPlayer.components.rememberVideoPlayerPulseState
 import com.google.jetstream.presentation.screens.videoPlayer.components.rememberVideoPlayerState
 import com.google.jetstream.presentation.utils.handleDPadKeyEvents
-import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
+import kotlinx.coroutines.delay
 
 object VideoPlayerScreen {
     const val MovieIdBundleKey = "movieId"
@@ -164,9 +164,10 @@ fun VideoPlayerScreenContent(movieDetails: MovieDetails, onBackPressed: () -> Un
     val pulseState = rememberVideoPlayerPulseState()
 
     val boxModifier = when (uiMode.formFactor) {
-        FormFactor.Tv -> Modifier
-            .dPadEvents(exoPlayer, videoPlayerState, pulseState)
-            .focusable()
+        FormFactor.Tv ->
+            Modifier
+                .dPadEvents(exoPlayer, videoPlayerState, pulseState)
+                .focusable()
 
         else -> Modifier.onClick(exoPlayer, videoPlayerState, pulseState)
     }

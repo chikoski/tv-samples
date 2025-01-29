@@ -16,8 +16,6 @@
 
 package com.google.jetstream.presentation.screens.dashboard
 
-import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

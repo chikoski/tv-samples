@@ -94,15 +94,18 @@ private fun Review(
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface)
             .focusable(interactionSource = interactionSource)
-            .indication(interactionSource = interactionSource, indication = borderIndication(
-                focusedBorder = Border(
-                    stroke = BorderStroke(
-                        width = ReviewItemOutlineWidth,
-                        color = MaterialTheme.colorScheme.outline,
-                    ),
-                    shape = JetStreamCardShape
+            .indication(
+                interactionSource = interactionSource,
+                indication = borderIndication(
+                    focusedBorder = Border(
+                        stroke = BorderStroke(
+                            width = ReviewItemOutlineWidth,
+                            color = MaterialTheme.colorScheme.outline,
+                        ),
+                        shape = JetStreamCardShape
+                    )
                 )
-            ))
+            )
             .then(modifier),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {

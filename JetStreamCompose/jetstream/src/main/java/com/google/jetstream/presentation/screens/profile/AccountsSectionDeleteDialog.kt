@@ -43,7 +43,7 @@ fun AccountsSectionDeleteDialog(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val confirmButton = remember{ FocusRequester() }
+    val confirmButton = remember { FocusRequester() }
 
     LaunchedEffect(Unit) {
         confirmButton.tryRequestFocus()

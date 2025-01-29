@@ -104,7 +104,8 @@ private fun MovieListItem(
             .onFocusChanged { isFocused = it.isFocused || it.hasFocus }
             .padding(top = JetStreamBorderWidth)
             .indication(
-                interactionSource = interactionSource, indication = borderIndication(
+                interactionSource = interactionSource,
+                indication = borderIndication(
                     focusedBorder = Border(
                         stroke = BorderStroke(
                             width = JetStreamBorderWidth,

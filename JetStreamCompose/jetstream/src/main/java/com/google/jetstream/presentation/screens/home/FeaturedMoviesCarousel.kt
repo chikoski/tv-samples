@@ -110,7 +110,6 @@ internal class FeaturedCarouselState(
             restore = { FeaturedCarouselState(it.first, it.second) }
         )
     }
-
 }
 
 @OptIn(ExperimentalTvMaterial3Api::class)
@@ -151,8 +150,7 @@ fun FeaturedMoviesCarousel(
             .handleDPadKeyEvents(onEnter = {
                 goToVideoPlayer(movies[featuredCarouselState.activeItemIndex])
             })
-            .dragDirectionDetector(featuredCarouselState)
-        ,
+            .dragDirectionDetector(featuredCarouselState),
         itemCount = movies.size,
         carouselState = featuredCarouselState.carouselState,
         carouselIndicator = {
@@ -308,26 +306,30 @@ private fun WatchNowButton() {
 
 private fun Modifier.dragDirectionDetector(state: FeaturedCarouselState) =
     this then
-            Modifier.pointerInput(state) {
-                coroutineScope {
-                    awaitEachGesture {
-                        val downEvent =
-                            awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
-                        var upEventOrCancellation: PointerInputChange? = null
-                        while (upEventOrCancellation == null) {
-                            val event = awaitPointerEvent(pass = PointerEventPass.Initial)
-                            if (event.changes.fastAll { it.changedToUp() }) {
-                                // All pointers are up
-                                upEventOrCancellation = event.changes[0]
-                            }
+        Modifier.pointerInput(state) {
+            coroutineScope {
+                awaitEachGesture {
+                    val downEvent =
+                        awaitFirstDown(
+                            requireUnconsumed = false,
+                            pass = PointerEventPass.Initial
+                        )
+                    var upEventOrCancellation: PointerInputChange? = null
+                    while (upEventOrCancellation == null) {
+                        val event = awaitPointerEvent(pass = PointerEventPass.Initial)
+                        if (event.changes.fastAll { it.changedToUp() }) {
+                            // All pointers are up
+                            upEventOrCancellation = event.changes[0]
                         }
+                    }
 
-                        val horizontalDifference = (upEventOrCancellation.position - downEvent.position).x
-                        if (horizontalDifference > 0) {
-                            state.moveToNextItem()
-                        } else {
-                            state.moveToPreviousItem()
-                        }
+                    val horizontalDifference =
+                        (upEventOrCancellation.position - downEvent.position).x
+                    if (horizontalDifference > 0) {
+                        state.moveToNextItem()
+                    } else {
+                        state.moveToPreviousItem()
                     }
                 }
             }
+        }
