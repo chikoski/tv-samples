@@ -93,16 +93,14 @@ fun DashboardScreen(
     val density = LocalDensity.current
     val focusManager = LocalFocusManager.current
     val navController = rememberNavController()
+    val dashboardState = rememberDashboardState()
 
     val items = remember {
-        Screens.entries.filter { it.isTabItem }.map { it to FocusRequester() }
+        listOf(Screens.Profile) + Screens.entries.filter { it.isTabItem }
     }
     val topBar = remember { FocusRequester() }
 
-    var isTopBarVisible by remember { mutableStateOf(true) }
     var isTopBarFocused by remember { mutableStateOf(false) }
-
-    var currentTopBarSelectedTabIndex by remember { mutableIntStateOf(0) }
 
     BackPressHandledArea(
         // 1. On user's first back press, bring focus to the current selected tab, if TopBar is not
@@ -112,7 +110,7 @@ fun DashboardScreen(
         onBackPressed = {
             /*
             if (!isTopBarVisible) {
-                isTopBarVisible = true
+                topBarState.show()
                 //TopBarFocusRequesters[currentTopBarSelectedTabIndex + 1].requestFocus()
             } else if (currentTopBarSelectedTabIndex == 0) onBackPressed()
             else if (!isTopBarFocused) {
@@ -131,7 +129,7 @@ fun DashboardScreen(
 
         // Used to show/hide DashboardTopBar
         val topBarYOffsetPx by animateIntAsState(
-            targetValue = if (isTopBarVisible) 0 else -topBarHeightPx,
+            targetValue = if (dashboardState.isTopBarVisible) 0 else -topBarHeightPx,
             animationSpec = tween(),
             label = "",
             finishedListener = {
@@ -144,7 +142,7 @@ fun DashboardScreen(
 
         // Used to push down/pull up NavHost when DashboardTopBar is shown/hidden
         val navHostTopPaddingDp by animateDpAsState(
-            targetValue = if (isTopBarVisible) with(density) { topBarHeightPx.toDp() } else 0.dp,
+            targetValue = if (dashboardState.isTopBarVisible) with(density) { topBarHeightPx.toDp() } else 0.dp,
             animationSpec = tween(),
             label = "",
         )
@@ -156,7 +154,7 @@ fun DashboardScreen(
             }
         }
         DashboardTopBar(
-            tabs = items,
+            items = items,
             modifier = Modifier
                 .offset { IntOffset(x = 0, y = topBarYOffsetPx) }
                 .onSizeChanged { topBarHeightPx = it.height }
@@ -171,24 +169,28 @@ fun DashboardScreen(
                     bottom = ParentPadding.calculateBottomPadding()
                 )
                 .focusRequester(topBar),
-            selectedTabIndex = currentTopBarSelectedTabIndex,
-            onTabSelected = {
-                currentTopBarSelectedTabIndex = it
-                val (screen, _) = items[it]
-                navController.navigate(screen())
+            selectedScreen = dashboardState.selectedScreen,
+            showScreen = {
+                dashboardState.updateSelectedScreen(it)
+                navController.navigate(it())
             },
-            showProfile = {
-                navController.navigate(Screens.Profile())
-            }
         )
         Body(
             openCategoryMovieList = openCategoryMovieList,
             openMovieDetailsScreen = openMovieDetailsScreen,
             openVideoPlayer = openVideoPlayer,
-            updateTopBarVisibility = { isTopBarVisible = it },
-            isTopBarVisible = isTopBarVisible,
+            updateTopBarVisibility = {
+                if (it) {
+                    dashboardState.showTopBar()
+                } else {
+                    dashboardState.hideTopBar()
+                }
+            },
+            isTopBarVisible = dashboardState.isTopBarVisible,
             navController = navController,
-            modifier = Modifier.offset(y = navHostTopPaddingDp),
+            modifier = Modifier.offset {
+                IntOffset(x = 0, y = navHostTopPaddingDp.roundToPx())
+            }
         )
     }
 }

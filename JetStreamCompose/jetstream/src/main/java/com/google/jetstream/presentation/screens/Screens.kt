@@ -16,6 +16,7 @@
 
 package com.google.jetstream.presentation.screens
 
+import androidx.annotation.IntRange
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -52,5 +53,19 @@ enum class Screens(
         val destination = StringBuilder()
         args.forEach { arg -> destination.append("/$arg") }
         return name + destination
+    }
+
+    fun toIndex(): Int {
+        return entries.indexOf(this)
+    }
+
+    companion object {
+        fun fromIndex(@IntRange(from = 0) index: Int): Screens? {
+            return when {
+                index < 0 -> null
+                index >= entries.size -> null
+                else -> entries[index]
+            }
+        }
     }
 }

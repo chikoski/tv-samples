@@ -32,16 +32,20 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -57,66 +61,63 @@ import com.google.jetstream.presentation.screens.Screens
 import com.google.jetstream.presentation.theme.IconSize
 import com.google.jetstream.presentation.theme.LexendExa
 
-private const val PROFILE_SCREEN_INDEX = -1
-
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun DashboardTopBar(
-    tabs: List<Pair<Screens, FocusRequester>>,
-    selectedTabIndex: Int,
-    onTabSelected: (index: Int) -> Unit,
-    showProfile: () -> Unit,
+    items: List<Screens>,
+    selectedScreen: Screens,
+    showScreen: (Screens) -> Unit,
     modifier: Modifier = Modifier,
-    avatar: FocusRequester = remember { FocusRequester() }
 ) {
     val focusManager = LocalFocusManager.current
-    val tabRow = remember { FocusRequester() }
+    val (tabRow, avatar) = remember { FocusRequester.createRefs() }
 
     val uiMode = rememberUiMode()
-    val onClickHandler: (Int) -> Unit = remember(uiMode) {
+    val onClickHandler: (Screens) -> Unit = remember(uiMode) {
         when (uiMode.formFactor) {
             FormFactor.Tv -> {
                 { focusManager.moveFocus(FocusDirection.Down) }
             }
 
-            else -> { it -> onTabSelected(it) }
+            else -> { it -> showScreen(it) }
         }
     }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.focusGroup(),
+        modifier = modifier
+            .focusProperties {
+                enter = {
+                    when (selectedScreen) {
+                        Screens.Profile -> avatar
+                        else -> tabRow
+                    }
+                }
+            }
+            .focusGroup(),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Box(modifier = Modifier.padding(8.dp)) {
             UserAvatar(
                 modifier = Modifier
                     .size(32.dp)
-                    .focusRequester(avatar)
                     .semantics {
                         contentDescription =
                             StringConstants.Composable.ContentDescription.UserAvatar
-                    },
-                selected = selectedTabIndex == PROFILE_SCREEN_INDEX,
-                onClick = showProfile
+                    }
+                    .focusRequester(avatar),
+                selected = selectedScreen == Screens.Profile,
+                onClick = { showScreen(Screens.Profile) }
             )
         }
         TopBarTabRow(
-            tabs = tabs,
-            selectedScreenIndex = selectedTabIndex,
+            tabs = items.slice(1..<items.size),
+            selectedScreen = selectedScreen,
             onClick = onClickHandler,
-            onTabSelected = onTabSelected,
+            onTabSelected = showScreen,
             modifier = Modifier
                 .weight(1f)
                 .focusRequester(tabRow)
-                .focusRestorer {
-                    if (selectedTabIndex < tabs.size) {
-                        tabs[selectedTabIndex].second
-                    } else {
-                        FocusRequester.Default
-                    }
-                }
-                .focusGroup()
         )
         Spacer(modifier.weight(0.1f))
         JetStreamLogo(
@@ -127,30 +128,63 @@ fun DashboardTopBar(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun TopBarTabRow(
-    tabs: List<Pair<Screens, FocusRequester>>,
-    onTabSelected: (Int) -> Unit,
-    onClick: (Int) -> Unit,
+    tabs: List<Screens>,
+    selectedScreen: Screens,
+    onTabSelected: (Screens) -> Unit,
+    onClick: (Screens) -> Unit,
     modifier: Modifier = Modifier,
-    selectedScreenIndex: Int = 0,
 ) {
+    val items = remember(tabs) {
+        tabs.map { it to FocusRequester() }
+    }
+
+    var selectedScreenIndex by rememberSaveable(tabs) {
+        mutableIntStateOf(selectedTabIndex(tabs, selectedScreen, 0))
+    }
+
+    selectedScreenIndex = selectedTabIndex(tabs, selectedScreen, selectedScreenIndex)
+
     TabRow(
         selectedTabIndex = selectedScreenIndex,
         divider = {},
         modifier = modifier
+            .focusProperties {
+                enter = {
+                    if (selectedScreenIndex < items.size) {
+                        items[selectedScreenIndex].second
+                    } else {
+                        items[0].second
+                    }
+                }
+            }
+            .focusGroup()
     ) {
-        tabs.forEachIndexed { index, (screen, focusRequester) ->
-            key(index) {
+        items.forEach { (screen, focusRequester) ->
+            key(screen) {
                 TopBarTab(
                     screen = screen,
-                    selected = index == selectedScreenIndex,
-                    onClick = { onClick(index) },
-                    onSelect = { onTabSelected(index) },
+                    selected = selectedScreen == screen,
+                    onClick = { onClick(screen) },
+                    onSelect = { onTabSelected(screen) },
                     modifier = Modifier.focusRequester(focusRequester)
                 )
             }
         }
+    }
+}
+
+private fun selectedTabIndex(
+    tabs: List<Screens>,
+    selectedScreen: Screens,
+    previouslySelectedTabIndex: Int
+): Int {
+    val index = tabs.indexOf(selectedScreen) % tabs.size
+    return when {
+        index < 0 -> previouslySelectedTabIndex
+        else -> index
     }
 }
 
@@ -165,7 +199,9 @@ private fun TopBarTab(
     Tab(
         selected = selected,
         modifier = Modifier
-            .tvSelectTarget(onSelect)
+            .tvSelectTarget {
+                onSelect()
+            }
             .then(modifier),
         onClick = onClick,
     ) {
