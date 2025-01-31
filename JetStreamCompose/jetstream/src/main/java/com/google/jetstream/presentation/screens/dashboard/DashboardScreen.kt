@@ -27,10 +27,8 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -100,31 +98,33 @@ fun DashboardScreen(
     }
     val topBar = remember { FocusRequester() }
 
-    var isTopBarFocused by remember { mutableStateOf(false) }
-
     BackPressHandledArea(
         // 1. On user's first back press, bring focus to the current selected tab, if TopBar is not
         //    visible, first make it visible, then focus the selected tab
         // 2. On second back press, bring focus back to the first displayed tab
         // 3. On third back press, exit the app
         onBackPressed = {
-            /*
-            if (!isTopBarVisible) {
-                topBarState.show()
-                //TopBarFocusRequesters[currentTopBarSelectedTabIndex + 1].requestFocus()
-            } else if (currentTopBarSelectedTabIndex == 0) onBackPressed()
-            else if (!isTopBarFocused) {
-                //TopBarFocusRequesters[currentTopBarSelectedTabIndex + 1].requestFocus()
-            } else {
-                //TopBarFocusRequesters[1].requestFocus()
+            when {
+                !dashboardState.isTopBarVisible -> {
+                    dashboardState.showTopBar()
+                    topBar.tryRequestFocus()
+                }
+
+                !dashboardState.isTopBarFocused -> {
+                    topBar.tryRequestFocus()
+                }
+
+                dashboardState.selectedScreen != Screens.Home -> {
+                    dashboardState.updateSelectedScreen(Screens.Home)
+                    navController.navigate(Screens.Home())
+                }
+
+                else -> {
+                    onBackPressed()
+                }
             }
-             */
         }
     ) {
-        // We do not want to focus the TopBar everytime we come back from another screen e.g.
-        // MovieDetails, CategoryMovieList or VideoPlayer screen
-        var wasTopBarFocusRequestedBefore by rememberSaveable { mutableStateOf(false) }
-
         var topBarHeightPx: Int by rememberSaveable { mutableIntStateOf(1) }
 
         // Used to show/hide DashboardTopBar
@@ -142,23 +142,23 @@ fun DashboardScreen(
 
         // Used to push down/pull up NavHost when DashboardTopBar is shown/hidden
         val navHostTopPaddingDp by animateDpAsState(
-            targetValue = if (dashboardState.isTopBarVisible) with(density) { topBarHeightPx.toDp() } else 0.dp,
+            targetValue = if (dashboardState.isTopBarVisible) {
+                with(density) { topBarHeightPx.toDp() }
+            } else {
+                0.dp
+            },
             animationSpec = tween(),
             label = "",
         )
 
-        LaunchedEffect(Unit) {
-            if (!wasTopBarFocusRequestedBefore) {
-                topBar.tryRequestFocus()
-                wasTopBarFocusRequestedBefore = true
-            }
-        }
         DashboardTopBar(
             items = items,
             modifier = Modifier
                 .offset { IntOffset(x = 0, y = topBarYOffsetPx) }
                 .onSizeChanged { topBarHeightPx = it.height }
-                .onFocusChanged { isTopBarFocused = it.hasFocus }
+                .onFocusChanged {
+                    dashboardState.updateTopBarFocusState(it.hasFocus)
+                }
                 .padding(
                     horizontal = ParentPadding.calculateStartPadding(
                         LocalLayoutDirection.current

@@ -32,6 +32,7 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
@@ -56,6 +57,7 @@ import com.google.jetstream.R
 import com.google.jetstream.data.util.StringConstants
 import com.google.jetstream.presentation.components.shim.FormFactor
 import com.google.jetstream.presentation.components.shim.rememberUiMode
+import com.google.jetstream.presentation.components.shim.tryRequestFocus
 import com.google.jetstream.presentation.components.shim.tvSelectTarget
 import com.google.jetstream.presentation.screens.Screens
 import com.google.jetstream.presentation.theme.IconSize
@@ -146,6 +148,10 @@ private fun TopBarTabRow(
     }
 
     selectedScreenIndex = selectedTabIndex(tabs, selectedScreen, selectedScreenIndex)
+
+    LaunchedEffect(selectedScreenIndex) {
+        items[selectedScreenIndex].second.tryRequestFocus()
+    }
 
     TabRow(
         selectedTabIndex = selectedScreenIndex,
