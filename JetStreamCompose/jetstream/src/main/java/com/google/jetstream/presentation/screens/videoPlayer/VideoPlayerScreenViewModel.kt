@@ -34,7 +34,7 @@ class VideoPlayerScreenViewModel @Inject constructor(
     repository: MovieRepository,
 ) : ViewModel() {
     val uiState = savedStateHandle
-        .getStateFlow<String?>(VideoPlayerScreen.MovieIdBundleKey, null)
+        .getStateFlow<String?>(VideoPlayerScreen.MOVIE_ID_BUNDLE_KEY, null)
         .map { id ->
             if (id == null) {
                 VideoPlayerScreenUiState.Error

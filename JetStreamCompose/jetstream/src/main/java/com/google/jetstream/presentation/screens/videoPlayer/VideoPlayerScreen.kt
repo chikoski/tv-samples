@@ -77,7 +77,7 @@ import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
 
 object VideoPlayerScreen {
-    const val MovieIdBundleKey = "movieId"
+    const val MOVIE_ID_BUNDLE_KEY = "movieId"
 }
 
 /**

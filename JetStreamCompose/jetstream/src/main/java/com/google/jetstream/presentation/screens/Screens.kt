@@ -38,7 +38,7 @@ enum class Screens(
     CategoryMovieList(listOf(CategoryMovieListScreen.CategoryIdBundleKey)),
     MovieDetails(listOf(MovieDetailsScreen.MOVIE_ID_BUNDLE_KEY)),
     Dashboard,
-    VideoPlayer(listOf(VideoPlayerScreen.MovieIdBundleKey));
+    VideoPlayer(listOf(VideoPlayerScreen.MOVIE_ID_BUNDLE_KEY));
 
     operator fun invoke(): String {
         val argList = StringBuilder()
