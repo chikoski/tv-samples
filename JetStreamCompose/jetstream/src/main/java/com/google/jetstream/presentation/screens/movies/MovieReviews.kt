@@ -49,6 +49,7 @@ import com.google.jetstream.data.util.StringConstants
 import com.google.jetstream.presentation.components.shim.Border
 import com.google.jetstream.presentation.components.shim.borderIndication
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
+import com.google.jetstream.presentation.theme.JetStreamBorder
 import com.google.jetstream.presentation.theme.JetStreamCardShape
 
 @Composable
@@ -97,11 +98,8 @@ private fun Review(
             .indication(
                 interactionSource = interactionSource,
                 indication = borderIndication(
-                    focusedBorder = Border(
-                        stroke = BorderStroke(
-                            width = ReviewItemOutlineWidth,
-                            color = MaterialTheme.colorScheme.outline,
-                        ),
+                    focused = Border(
+                        stroke = JetStreamBorder.stroke.copy(width = ReviewItemOutlineWidth),
                         shape = JetStreamCardShape
                     )
                 )

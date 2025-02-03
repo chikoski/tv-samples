@@ -19,6 +19,7 @@ package com.google.jetstream.presentation.components.shim
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.IndicationNodeFactory
 import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.interaction.FocusInteraction
 import androidx.compose.foundation.interaction.HoverInteraction
 import androidx.compose.foundation.interaction.InteractionSource
@@ -43,63 +44,70 @@ import kotlinx.coroutines.launch
 
 fun Modifier.borderIndication(
     interactionSource: InteractionSource,
-    focusedBorder: Border = Border.None,
-    pressedBorder: Border = focusedBorder,
-    hoveredBorder: Border = focusedBorder,
+    focused: Border = Border.None,
+    pressed: Border = focused,
+    hover: Border = focused,
+    dragged: Border = pressed,
 ): Modifier =
-    indication(interactionSource, borderIndication(focusedBorder, pressedBorder, hoveredBorder))
+    indication(interactionSource, borderIndication(focused, pressed, hover, dragged))
 
 fun borderIndication(
-    focusedBorder: Border = Border.None,
-    pressedBorder: Border = focusedBorder,
-    hoveredBorder: Border = focusedBorder,
-) = BorderIndicationNodeFactory(focusedBorder, pressedBorder, hoveredBorder)
+    focused: Border = Border.None,
+    pressed: Border = focused,
+    hover: Border = focused,
+    dragged: Border = pressed,
+) = BorderIndicationNodeFactory(focused, pressed, hover, dragged)
 
 class BorderIndicationNodeFactory(
-    private val focusedBorder: Border = Border.None,
-    private val pressedBorder: Border = focusedBorder,
-    private val hoveredBorder: Border = focusedBorder,
+    private val focused: Border = Border.None,
+    private val pressed: Border = focused,
+    private val hover: Border = focused,
+    private val dragged: Border = pressed,
 ) : IndicationNodeFactory {
     override fun create(interactionSource: InteractionSource): DelegatableNode {
-        return BorderIndicationNode(interactionSource, focusedBorder, pressedBorder, hoveredBorder)
+        return BorderIndicationNode(interactionSource, focused, pressed, hover, dragged)
     }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is BorderIndicationNodeFactory) return false
-        return focusedBorder == other.focusedBorder &&
-            pressedBorder == other.pressedBorder &&
-            hoveredBorder == other.hoveredBorder
+        return focused == other.focused &&
+                pressed == other.pressed &&
+                hover == other.hover &&
+                dragged == other.dragged
     }
 
     override fun hashCode(): Int {
-        return focusedBorder.hashCode() * 31 +
-            pressedBorder.hashCode() * 31 +
-            hoveredBorder.hashCode()
+        return focused.hashCode() * 31 +
+                pressed.hashCode() * 31 +
+                hover.hashCode() * 31 +
+                dragged.hashCode()
     }
 }
 
 private class BorderIndicationNode(
     private val interactionSource: InteractionSource,
-    private val focusedBorder: Border = Border.None,
-    private val pressedBorder: Border = focusedBorder,
-    private val hoveredBorder: Border = focusedBorder,
+    private val focused: Border = Border.None,
+    private val pressed: Border = focused,
+    private val hover: Border = focused,
+    private val dragged: Border = pressed,
 ) : Modifier.Node(),
     DrawModifierNode {
 
-    private var state: Border? = null
+    private var state: Border = Border.None
 
     override fun onAttach() {
         coroutineScope.launch {
             interactionSource.interactions.collect { interaction ->
                 state = when (interaction) {
-                    is PressInteraction.Press -> pressedBorder
-                    is FocusInteraction.Focus -> focusedBorder
-                    is HoverInteraction.Enter -> hoveredBorder
-                    else -> null
+                    is PressInteraction.Press -> pressed
+                    is FocusInteraction.Focus -> focused
+                    is HoverInteraction.Enter -> hover
+                    is DragInteraction.Start -> dragged
+                    else -> Border.None
                 }
+                invalidateDraw()
             }
-            invalidateDraw()
         }
     }
 
@@ -107,7 +115,7 @@ private class BorderIndicationNode(
         drawContent()
 
         val border = state
-        if (border != null && border.stroke.width.value > 0) {
+        if (border.stroke.width.value > 0) {
             val outline = border.shape.createOutline(size, layoutDirection, this)
             inset(inset = -border.inset.toPx()) {
                 drawOutline(

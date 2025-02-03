@@ -16,7 +16,6 @@
 
 package com.google.jetstream.presentation.screens.movies
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -59,10 +58,9 @@ import coil.request.ImageRequest
 import com.google.jetstream.R
 import com.google.jetstream.data.entities.MovieDetails
 import com.google.jetstream.data.util.StringConstants
-import com.google.jetstream.presentation.components.shim.Border
 import com.google.jetstream.presentation.components.shim.borderIndication
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
-import com.google.jetstream.presentation.theme.JetStreamBorderWidth
+import com.google.jetstream.presentation.theme.JetStreamBorder
 import com.google.jetstream.presentation.theme.JetStreamButtonShape
 import kotlinx.coroutines.launch
 
@@ -134,18 +132,12 @@ private fun WatchTrailerButton(
     val interactionSource = remember { MutableInteractionSource() }
     Button(
         onClick = goToMoviePlayer,
-        modifier = modifier.padding(top = 24.dp).indication(
-            interactionSource = interactionSource,
-            indication = borderIndication(
-                focusedBorder = Border(
-                    stroke = BorderStroke(
-                        width = JetStreamBorderWidth,
-                        color = MaterialTheme.colorScheme.outline
-                    ),
-                    shape = JetStreamButtonShape
-                )
-            )
-        ),
+        modifier = modifier
+            .padding(top = 24.dp)
+            .indication(
+                interactionSource = interactionSource,
+                indication = borderIndication(focused = JetStreamBorder)
+            ),
         contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
         interactionSource = interactionSource,
         shape = JetStreamButtonShape

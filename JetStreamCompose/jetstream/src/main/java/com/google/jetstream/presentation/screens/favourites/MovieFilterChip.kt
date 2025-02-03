@@ -48,7 +48,7 @@ fun MovieFilterChip(
     FilterChip(
         modifier = modifier
             .padding(end = 16.dp)
-            .indication(interactionSource, borderIndication(focusedBorder = ChipFocusedBorder)),
+            .indication(interactionSource, borderIndication(focused = ChipFocusedBorder)),
         onClick = { onCheckedChange(!isChecked) },
         selected = isChecked,
         leadingIcon = {

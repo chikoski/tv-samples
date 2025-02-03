@@ -89,7 +89,7 @@ private fun CastAndCrewItem(
         modifier = modifier
             .padding(end = 20.dp, bottom = 16.dp)
             .aspectRatio(1 / 1.8f)
-            .borderIndication(interactionSource, focusedBorder = JetStreamBorder),
+            .borderIndication(interactionSource, focused = JetStreamBorder),
         shape = JetStreamCardShape,
         title = {
             Text(

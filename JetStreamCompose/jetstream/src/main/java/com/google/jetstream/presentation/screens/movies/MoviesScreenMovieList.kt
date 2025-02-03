@@ -54,6 +54,7 @@ import com.google.jetstream.presentation.components.shim.Border
 import com.google.jetstream.presentation.components.shim.CompactCard
 import com.google.jetstream.presentation.components.shim.borderIndication
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
+import com.google.jetstream.presentation.theme.JetStreamBorder
 import com.google.jetstream.presentation.theme.JetStreamBorderWidth
 import com.google.jetstream.presentation.theme.JetStreamCardShape
 
@@ -105,15 +106,7 @@ private fun MovieListItem(
             .padding(top = JetStreamBorderWidth)
             .indication(
                 interactionSource = interactionSource,
-                indication = borderIndication(
-                    focusedBorder = Border(
-                        stroke = BorderStroke(
-                            width = JetStreamBorderWidth,
-                            color = MaterialTheme.colorScheme.outline,
-                        ),
-                        shape = JetStreamCardShape
-                    )
-                )
+                indication = borderIndication(focused = JetStreamBorder)
             ),
         colors = CardDefaults.cardColors(
             containerColor = Color.Transparent,

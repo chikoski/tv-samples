@@ -16,41 +16,35 @@
 
 package com.google.jetstream.presentation.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import com.google.jetstream.presentation.components.shim.Border
 import com.google.jetstream.presentation.components.shim.StandardCardContainer
 import com.google.jetstream.presentation.components.shim.borderIndication
-import com.google.jetstream.presentation.theme.JetStreamBorderWidth
-import com.google.jetstream.presentation.theme.JetStreamCardShape
+import com.google.jetstream.presentation.theme.JetStreamBorder
 
 @Composable
 fun MovieCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource  = remember { MutableInteractionSource() },
     title: @Composable () -> Unit = {},
     content: @Composable BoxScope.() -> Unit,
 ) {
     StandardCardContainer(
         modifier = modifier,
+        interactionSource = interactionSource,
         title = title,
-        imageCard = { interactionSource ->
+        imageCard = {
             Box(
                 modifier = Modifier.clickable(
-                    interactionSource = interactionSource,
+                    interactionSource = it,
                     indication = borderIndication(
-                        focusedBorder = Border(
-                            stroke = BorderStroke(
-                                width = JetStreamBorderWidth,
-                                color = MaterialTheme.colorScheme.outline,
-                            ),
-                            shape = JetStreamCardShape
-                        )
+                        focused = JetStreamBorder,
                     ),
                     onClick = onClick
                 ),

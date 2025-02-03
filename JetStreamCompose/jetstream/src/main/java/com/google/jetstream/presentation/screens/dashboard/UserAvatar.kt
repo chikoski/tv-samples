@@ -48,7 +48,7 @@ fun UserAvatar(
             contentDescription = null,
             modifier = modifier
                 .fillMaxSize()
-                .borderIndication(interactionSource = interactionSource, focusedBorder = border),
+                .borderIndication(interactionSource = interactionSource, focused = border),
         )
     }
 }
