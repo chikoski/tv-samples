@@ -37,11 +37,13 @@ fun FilteredMoviesGrid(
     state: LazyGridState,
     movieList: MovieList,
     onMovieClick: (movieId: String) -> Unit,
+    modifier: Modifier = Modifier,
+    columns: GridCells = GridCells.Fixed(6),
 ) {
     LazyVerticalGrid(
         state = state,
-        modifier = Modifier.fillMaxSize(),
-        columns = GridCells.Fixed(6),
+        modifier = modifier,
+        columns = columns,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(bottom = JetStreamBottomListPadding),

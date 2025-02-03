@@ -19,6 +19,8 @@ package com.google.jetstream.presentation.components
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.focusGroup
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,10 +33,9 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -44,7 +45,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusRestorer
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
@@ -223,24 +223,26 @@ private fun MoviesRowItem(
     itemDirection: ItemDirection = ItemDirection.Vertical,
     onMovieFocused: (Movie) -> Unit = {},
 ) {
-    var isFocused by remember { mutableStateOf(false) }
+    val interactionSource = remember { MutableInteractionSource() }
+    val isFocused by interactionSource.collectIsFocusedAsState()
+
+    LaunchedEffect(isFocused) {
+        if (isFocused) {
+            onMovieFocused(movie)
+        }
+    }
 
     MovieCard(
         onClick = { onMovieSelected(movie) },
         title = {
             MoviesRowItemText(
                 showItemTitle = showItemTitle,
-                isItemFocused = isFocused,
+                isItemFocused = true,
                 movie = movie
             )
         },
+        interactionSource = interactionSource,
         modifier = Modifier
-            .onFocusChanged {
-                isFocused = it.isFocused
-                if (it.isFocused) {
-                    onMovieFocused(movie)
-                }
-            }
             .focusProperties {
                 left = if (index == 0) {
                     FocusRequester.Cancel

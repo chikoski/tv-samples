@@ -47,6 +47,7 @@ fun FavouritesScreen(
         is FavouriteScreenUiState.Loading -> {
             Loading(modifier = Modifier.fillMaxSize())
         }
+
         is FavouriteScreenUiState.Ready -> {
             Catalog(
                 favouriteMovieList = s.favouriteMovieList,
@@ -78,7 +79,7 @@ private fun Catalog(
     val shouldShowTopBar by remember {
         derivedStateOf {
             filteredMoviesGridState.firstVisibleItemIndex == 0 &&
-                filteredMoviesGridState.firstVisibleItemScrollOffset < 100
+                    filteredMoviesGridState.firstVisibleItemScrollOffset < 100
         }
     }
 
@@ -106,7 +107,7 @@ private fun Catalog(
         FilteredMoviesGrid(
             state = filteredMoviesGridState,
             movieList = favouriteMovieList,
-            onMovieClick = onMovieClick
+            onMovieClick = onMovieClick,
         )
     }
 }
