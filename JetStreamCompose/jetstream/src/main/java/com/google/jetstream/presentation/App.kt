@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -34,7 +35,8 @@ import com.google.jetstream.presentation.screens.videoPlayer.VideoPlayerScreen
 
 @Composable
 fun App(
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
 
     val navController = rememberNavController()
@@ -43,6 +45,7 @@ fun App(
     NavHost(
         navController = navController,
         startDestination = Screens.Dashboard(),
+        modifier = modifier,
         builder = {
             composable(
                 route = Screens.CategoryMovieList(),

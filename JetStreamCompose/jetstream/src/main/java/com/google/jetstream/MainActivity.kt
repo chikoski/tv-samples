@@ -19,15 +19,21 @@ package com.google.jetstream
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.google.jetstream.presentation.App
+import com.google.jetstream.presentation.components.shim.FormFactor
+import com.google.jetstream.presentation.components.shim.UiMode
 import com.google.jetstream.presentation.theme.JetStreamTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -37,22 +43,38 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         super.onCreate(savedInstanceState)
 
+        if (toEnableEdgeToEdge()) {
+            enableEdgeToEdge()
+        }
+
         setContent {
             JetStreamTheme {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.background)
-                ) {
+                Surface(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
                     CompositionLocalProvider(
                         LocalContentColor provides MaterialTheme.colorScheme.onSurface
                     ) {
-                        App(
-                            onBackPressed = onBackPressedDispatcher::onBackPressed,
-                        )
+                        Box(
+                            modifier = Modifier
+                                .safeDrawingPadding()
+                                .clipToBounds()
+                        ) {
+                            App(
+                                onBackPressed = onBackPressedDispatcher::onBackPressed,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
                     }
                 }
             }
+        }
+    }
+
+    private fun toEnableEdgeToEdge(): Boolean {
+        val uiMode = UiMode.from(resources.configuration)
+        return when (uiMode.formFactor) {
+            FormFactor.Normal -> true
+            FormFactor.Desk -> true
+            else -> false
         }
     }
 }
