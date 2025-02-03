@@ -31,20 +31,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -52,6 +54,7 @@ import com.google.jetstream.R
 import com.google.jetstream.data.entities.Movie
 import com.google.jetstream.data.entities.MovieList
 import com.google.jetstream.presentation.components.MoviesRow
+import com.google.jetstream.presentation.components.shim.tryRequestFocus
 import com.google.jetstream.presentation.screens.dashboard.rememberChildPadding
 
 @Composable
@@ -64,7 +67,7 @@ fun SearchScreen(
     val shouldShowTopBar by remember {
         derivedStateOf {
             lazyColumnState.firstVisibleItemIndex == 0 &&
-                lazyColumnState.firstVisibleItemScrollOffset < 100
+                    lazyColumnState.firstVisibleItemScrollOffset < 100
         }
     }
 
@@ -79,11 +82,13 @@ fun SearchScreen(
             Text(text = "Searching...")
         }
 
-        is SearchState.Done -> {
+        is SearchState.Ready -> {
             val movieList = s.movieList
             SearchResult(
+                searchText = s.textFieldValue,
                 movieList = movieList,
                 searchMovies = searchScreenViewModel::query,
+                updateSearchText = searchScreenViewModel::updateSearchText,
                 onMovieClick = onMovieClick
             )
         }
@@ -92,16 +97,18 @@ fun SearchScreen(
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SearchResult(
+private fun SearchResult(
+    searchText: TextFieldValue,
     movieList: MovieList,
-    searchMovies: (queryString: String) -> Unit,
+    searchMovies: () -> Unit,
+    updateSearchText: (TextFieldValue) -> Unit,
     onMovieClick: (movie: Movie) -> Unit,
     modifier: Modifier = Modifier,
     lazyColumnState: LazyListState = rememberLazyListState(),
 ) {
     val childPadding = rememberChildPadding()
-    var searchQuery by remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
+    val searchResult = remember { FocusRequester() }
 
     LazyColumn(
         modifier = modifier,
@@ -109,8 +116,8 @@ fun SearchResult(
     ) {
         item {
             TextField(
-                value = searchQuery,
-                onValueChange = { searchQuery = it },
+                value = searchText,
+                onValueChange = updateSearchText,
                 placeholder = {
                     Text(text = stringResource(R.string.search_screen_et_placeholder))
                 },
@@ -150,7 +157,7 @@ fun SearchResult(
                 ),
                 keyboardActions = KeyboardActions(
                     onSearch = {
-                        searchMovies(searchQuery)
+                        searchMovies()
                         focusManager.moveFocus(FocusDirection.Down)
                     }
                 ),
@@ -164,7 +171,13 @@ fun SearchResult(
             MoviesRow(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = childPadding.top * 2),
+                    .padding(top = childPadding.top * 2)
+                    .focusRequester(searchResult)
+                    .onPlaced {
+                        if (movieList.isNotEmpty()) {
+                            searchResult.tryRequestFocus()
+                        }
+                    },
                 movieList = movieList
             ) { selectedMovie -> onMovieClick(selectedMovie) }
         }
